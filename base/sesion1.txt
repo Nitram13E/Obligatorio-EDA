@@ -1,0 +1,15 @@
+5
+3
+Esta es mi primer entrada
+1.1.12.2
+
+1
+hola.txt
+5
+12
+Esta es la línea doce
+1.1.23
+
+11
+s
+
