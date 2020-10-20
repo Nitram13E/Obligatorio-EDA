@@ -40,7 +40,7 @@ int main()
            case 2:
                   cout << "Se va a borrar el archivo: ";
                   retorno = BorrarArchivo(archivo );
-                  imprimirResultado(retorno);
+                  imprimirResultado(retorno, error);
                   break;
            case 5:
                   linea = new char [MAX_LARGO_LINEA];

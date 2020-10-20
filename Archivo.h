@@ -1,6 +1,11 @@
 #ifndef ARCHIVO_H_INCLUDED
 #define ARCHIVO_H_INCLUDED
 
+enum _retorno{
+	OK, ERROR, NO_IMPLEMENTADA
+};
+
+typedef enum _retorno TipoRet;
 
 typedef struct Linea
 {
