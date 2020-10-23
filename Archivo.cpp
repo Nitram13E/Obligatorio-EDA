@@ -3,7 +3,7 @@
 
 
 Archivo CrearArchivo(char * nombre){
-    return NULL;
+    return NULL; 
 }
 
 TipoRet BorrarArchivo(Archivo &a){
@@ -31,7 +31,7 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * e
 }
 
 TipoRet  MostrarTexto(Archivo a, char * version){
-    return NO_IMPLEMENTADA;
+    return NO_IMPLEMENTADA; 
 }
 
 TipoRet  MostrarCambios(Archivo a, char * version){
