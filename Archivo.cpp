@@ -1,16 +1,79 @@
-#include<stdlib.h>
-#include"Archivo.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "Archivo.h"
+#include "auxiliares.cpp"
+#include "string.h"
 
 
 Archivo CrearArchivo(char * nombre){
-    return NULL;
+    
+    Archivo nuevoArchivo = new struct _archivo;
+    nuevoArchivo -> nombre = nombre;
+    nuevoArchivo -> versiones = NULL;
+
+    return nuevoArchivo;
 }
 
 TipoRet BorrarArchivo(Archivo &a){
     return NO_IMPLEMENTADA;
 }
 
-TipoRet CrearVersion(Archivo &a, char * version, char * error){
+TipoRet CrearVersion(Archivo &a, char * version, char * &error){
+
+    numVersion header_version = a -> versiones;
+    char dot = ' ';
+    int length = strlen(version);
+
+
+    if (a->versiones == NULL)
+    {
+        a -> versiones = defVersion(version);
+
+        error = "version creada";
+        return OK;
+
+    }
+    else
+    {
+
+        if (typeVersion(version))
+        {
+            siguienteVersion(header_version, version);
+            error = "version creada";
+            return OK;
+            
+        }
+        else
+        {
+
+            char * auxPadre = new char[strlen(version) - 2];
+
+            for (int i = 0; i < strlen(version)-2; i++)
+            {
+                auxPadre[i] = version[i];
+            }
+            
+
+            numVersion padre = buscarPadre(a->versiones, auxPadre);
+            
+            
+            if(padre -> subVersion != NULL)
+            {
+                siguienteVersion(padre -> subVersion, version);
+            }
+            else
+            {
+                padre -> subVersion = defVersion(version);
+            }
+            
+            return OK;
+
+        }
+        
+        
+        
+    }
+
     return NO_IMPLEMENTADA;
 }
 
@@ -31,7 +94,7 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * e
 }
 
 TipoRet  MostrarTexto(Archivo a, char * version){
-    return NO_IMPLEMENTADA;
+    return NO_IMPLEMENTADA; 
 }
 
 TipoRet  MostrarCambios(Archivo a, char * version){
@@ -45,5 +108,6 @@ TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales){
 TipoRet  VersionIndependiente(Archivo &a, char * version){
     return NO_IMPLEMENTADA;
 }
+
 
 
