@@ -2,7 +2,7 @@
 
 bool existeVersion(numVersion, char *);
 
-void mostrarVersiones(numVersion);
+void mostrarVersiones(numVersion, int);
 
 numVersion buscarPadre(numVersion, char *);
 

@@ -20,7 +20,7 @@ TipoRet BorrarArchivo(Archivo &a){
 
 TipoRet CrearVersion(Archivo &a, char * version, char * &error){
 
-    numVersion aux = a -> versiones;
+    numVersion header_version = a -> versiones;
     char dot = ' ';
     int length = strlen(version);
 
@@ -35,16 +35,10 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
     }
     else
     {
+
         if (typeVersion(version))
         {
-
-            while (aux->siguiente != NULL)
-            {
-                aux = aux -> siguiente;
-            }
-            
-            aux -> siguiente = defVersion(version);
-
+            siguienteVersion(header_version, version);
             error = "version creada";
             return OK;
             
@@ -58,10 +52,19 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
             {
                 auxPadre[i] = version[i];
             }
+            
 
             numVersion padre = buscarPadre(a->versiones, auxPadre);
-
-            padre -> subVersion = defVersion(version);
+            
+            
+            if(padre -> subVersion != NULL)
+            {
+                siguienteVersion(padre -> subVersion, version);
+            }
+            else
+            {
+                padre -> subVersion = defVersion(version);
+            }
             
             return OK;
 

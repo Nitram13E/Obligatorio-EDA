@@ -53,13 +53,12 @@ int main()
                   cin >> cadenaAux;
                   retorno = CrearVersion(archivo,cadenaAux, error); 
                   imprimirResultado(retorno, error);
-                  cout << "La version es " << archivo->versiones->num_version << endl;
                   sleep(2);
                   break;   
 
             case 4:
                   
-                  mostrarVersiones(archivo->versiones);
+                  mostrarVersiones(archivo->versiones,0);
                   sleep(2);
 
                   break;        

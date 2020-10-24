@@ -26,15 +26,27 @@ bool existeVersion(numVersion versiones, char * version)
 }
 
 
-void mostrarVersiones(numVersion version)
+void mostrarVersiones(numVersion version, int space)
 {
 
-    if (version == NULL) return;
+    if (version == NULL)
+      
+      return;
 
-    printf("%s\n", version->num_version);
+   space += 2;
 
-    mostrarVersiones(version->siguiente);
-    mostrarVersiones(version->subVersion);
+   mostrarVersiones(version->siguiente, space);
+
+   for (int i = 2; i < space; i++){
+
+       printf("   ");
+
+   }
+
+
+   printf("%s\n",version -> num_version);
+
+   mostrarVersiones(version->subVersion, space);
 
 }
 
@@ -45,16 +57,11 @@ numVersion buscarPadre(numVersion padre, char * padre_num)
     if (padre != NULL)
     {
 
-        printf("padre %s\n", padre->num_version);
-        printf("version %s\n", padre_num);
-
         if (strcmp(padre->num_version, padre_num) == 0)
         {
-            printf("x\n");
             return padre;
         }
 
-            printf("f\n");
     
         if (padre->siguiente != NULL)
         {
@@ -66,8 +73,6 @@ numVersion buscarPadre(numVersion padre, char * padre_num)
         
         }
         
-        
-
     } 
     
 
@@ -77,7 +82,7 @@ numVersion buscarPadre(numVersion padre, char * padre_num)
 numVersion defVersion(char * version)
 {
     numVersion nuevaVersion = new struct Version;
-    
+
     nuevaVersion -> num_version = version;
     nuevaVersion -> siguiente = NULL;
     nuevaVersion -> subVersion = NULL;
@@ -101,4 +106,14 @@ bool typeVersion(char * version)
     
     return true;
     
+}
+
+void siguienteVersion(numVersion &header_version, char * version)
+{
+        while (header_version->siguiente != NULL)
+        {
+            header_version = header_version -> siguiente;
+        }
+        
+        header_version -> siguiente = defVersion(version);
 }
