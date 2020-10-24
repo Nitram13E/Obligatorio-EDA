@@ -1,6 +1,10 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "Archivo.h"
 #include "auxiliares.cpp"
+#include "string.h"
+
+
 Archivo CrearArchivo(char * nombre){
     
     Archivo nuevoArchivo = new struct _archivo;
@@ -16,33 +20,59 @@ TipoRet BorrarArchivo(Archivo &a){
 
 TipoRet CrearVersion(Archivo &a, char * version, char * &error){
 
+    numVersion header_version = a -> versiones;
+    char dot = ' ';
+    int length = strlen(version);
+
+
     if (a->versiones == NULL)
     {
-        numVersion nuevaVersion = new struct Version;
-        nuevaVersion -> num_version = version;
-        nuevaVersion -> siguiente = NULL;
-        nuevaVersion -> subVersion = NULL;
-        a -> versiones = nuevaVersion;
+        a -> versiones = defVersion(version);
 
         error = "version creada";
         return OK;
 
-    } 
+    }
     else
     {
-        if (buscarVersion(a -> versiones, version) == NULL)
+
+        if (typeVersion(version))
         {
+            siguienteVersion(header_version, version);
+            error = "version creada";
             return OK;
-        } 
+            
+        }
         else
         {
-            return ERROR;
+
+            char * auxPadre = new char[strlen(version) - 2];
+
+            for (int i = 0; i < strlen(version)-2; i++)
+            {
+                auxPadre[i] = version[i];
+            }
+            
+
+            numVersion padre = buscarPadre(a->versiones, auxPadre);
+            
+            
+            if(padre -> subVersion != NULL)
+            {
+                siguienteVersion(padre -> subVersion, version);
+            }
+            else
+            {
+                padre -> subVersion = defVersion(version);
+            }
+            
+            return OK;
+
         }
         
         
+        
     }
-    
-    
 
     return NO_IMPLEMENTADA;
 }

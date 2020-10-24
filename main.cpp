@@ -5,6 +5,7 @@
 
 #include "Archivo.h"
 #include "Constantes.h"
+#include "auxiliares.h"
 
 using namespace std;
 
@@ -42,17 +43,25 @@ int main()
                   break;
            case 2:
                   cout << "Se va a borrar el archivo: ";
-                  retorno = BorrarArchivo(archivo );
+                  retorno = BorrarArchivo(archivo);
                   imprimirResultado(retorno, error);
                   break;
 
             case 3:
                   cout << "Ingrese nombre de la version: ";
+                  cadenaAux = new char [MAX_LARGO_LINEA];
                   cin >> cadenaAux;
                   retorno = CrearVersion(archivo,cadenaAux, error); 
                   imprimirResultado(retorno, error);
                   sleep(2);
-                  break;
+                  break;   
+
+            case 4:
+                  
+                  mostrarVersiones(archivo->versiones,0);
+                  sleep(2);
+
+                  break;        
 
            case 5:
                   linea = new char [MAX_LARGO_LINEA];
