@@ -14,6 +14,12 @@ Archivo CrearArchivo(char * nombre){
     return nuevoArchivo;
 }
 
+TipoRet BorrarArchivo(Archivo &a)
+{
+    return NO_IMPLEMENTADA;
+}
+
+
 TipoRet BorrarArchivo(Archivo &a){
     return NO_IMPLEMENTADA;
 }
@@ -21,7 +27,6 @@ TipoRet BorrarArchivo(Archivo &a){
 TipoRet CrearVersion(Archivo &a, char * version, char * &error){
 
     numVersion header_version = a -> versiones;
-    char dot = ' ';
     int length = strlen(version);
 
 
@@ -69,8 +74,6 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
             return OK;
 
         }
-        
-        
         
     }
 
