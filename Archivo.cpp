@@ -157,22 +157,40 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
         else
         {
             line lineaAuxiliar = headLine;
+            line anteriorExistente = NULL;
             while (lineaAuxiliar -> siguiente != NULL)
             {
+                if (lineaAuxiliar -> siguiente -> nroLinea == nroLinea) 
+                {
+                	anteriorExistente = lineaAuxiliar;
+                }
                 lineaAuxiliar = lineaAuxiliar -> siguiente;
             }
 
-            if ((lineaAuxiliar -> nroLinea) + 1 == nroLinea) {
-              lineaAuxiliar -> siguiente = defLinea(linea, nroLinea);
+            if (anteriorExistente == NULL)
+            {
+            	if ((lineaAuxiliar -> nroLinea) + 1 == nroLinea)
+            	{
+              	lineaAuxiliar -> siguiente = defLinea(linea, nroLinea);
+            	}
+            	else
+            	{
+              	error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
+              	return ERROR;
+            	}
+
             }
             else
             {
-
-              error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
-              return ERROR;
-
+            
+            	correrLineas(anteriorExistente -> siguiente);
+            	
+            	line nuevaLinea = new struct Linea;
+   						nuevaLinea ->contLinea = linea;
+    					nuevaLinea -> nroLinea = nroLinea;
+    					nuevaLinea -> siguiente = anteriorExistente -> siguiente;
+    					anteriorExistente -> siguiente = nuevaLinea;
             }
-
         }
 
         error = "Linea insertada";
