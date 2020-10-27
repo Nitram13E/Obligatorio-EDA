@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 
+//Veifica si la version ingresa existe
 bool existeVersion(numVersion versiones, char * version)
 {
 
     if (versiones != NULL)
     {
-        
+
         if (versiones->num_version == version)
         {
             return true;
@@ -16,21 +17,21 @@ bool existeVersion(numVersion versiones, char * version)
 
         existeVersion(versiones -> siguiente, version);
         existeVersion(versiones -> subVersion, version);
-        
+
     }
 
 
     return false;
-    
+
 
 }
 
-
+// muestra versiones
 void mostrarVersiones(numVersion version, int space)
 {
 
     if (version == NULL)
-      
+
       return;
 
    space += 2;
@@ -50,7 +51,7 @@ void mostrarVersiones(numVersion version, int space)
 
 }
 
-
+// Busca al padre de la sub version a crear
 numVersion buscarPadre(numVersion padre, char * padre_num)
 {
 
@@ -62,7 +63,7 @@ numVersion buscarPadre(numVersion padre, char * padre_num)
             return padre;
         }
 
-    
+
         if (padre->siguiente != NULL)
         {
             return buscarPadre(padre->siguiente, padre_num);
@@ -70,15 +71,16 @@ numVersion buscarPadre(numVersion padre, char * padre_num)
         else if (padre -> subVersion != NULL)
         {
             return buscarPadre(padre->subVersion, padre_num);
-        
+
         }
-        
-    } 
-    
+
+    }
+
 
     return NULL;
 }
 
+//Estructura para crear una nueva version
 numVersion defVersion(char * version)
 {
     numVersion nuevaVersion = new struct Version;
@@ -91,29 +93,54 @@ numVersion defVersion(char * version)
 }
 
 
-
+//Devuelve si la version ingresada es main o sub version
 bool typeVersion(char * version)
 {
-    
+
     for (int i = 0; i < strlen(version); i++)
     {
         if (version[i] == '.')
         {
             return false;
         }
-        
+
     }
-    
+
     return true;
-    
+
 }
 
-void siguienteVersion(numVersion &header_version, char * version)
+//Se inserta una nueva sub version como siguiente del ultimo hermano
+bool siguienteVersion(numVersion &header_version, char * version)
 {
-        while (header_version->siguiente != NULL)
+        numVersion auxiliar = header_version;
+
+        while (auxiliar->siguiente != NULL)
         {
-            header_version = header_version -> siguiente;
+            auxiliar = auxiliar -> siguiente;
         }
-        
-        header_version -> siguiente = defVersion(version);
+
+        int lastCharNode = auxiliar -> num_version[strlen(auxiliar -> num_version) - 1];
+        int lastCharVersion = version[strlen(version) - 1];
+
+        if (lastCharVersion - lastCharNode == 1)
+        {
+            auxiliar -> siguiente = defVersion(version);
+            return true;
+        }
+
+        return false;
+}
+
+
+line defLinea(char * contLinea, int nroLinea)
+{
+
+    line nuevaLinea = new struct Linea;
+    nuevaLinea ->contLinea = contLinea;
+    nuevaLinea -> nroLinea = nroLinea;
+    nuevaLinea -> siguiente = NULL;
+
+    return nuevaLinea;
+
 }
