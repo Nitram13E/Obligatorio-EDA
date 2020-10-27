@@ -9,27 +9,26 @@ typedef enum _retorno TipoRet;
 
 typedef struct Linea
 {
-	char * contlinea;
-	int indice;
-	struct Linea * next;
-	
-}*linea;
+	char * contLinea;
+	int nroLinea;
+	struct Linea * siguiente;
+
+}*line;
 
 typedef struct Version
 {
 	char * num_version;
-	linea contenido;
+	line contenido;
 	struct Version * siguiente;
 	struct Version * subVersion;
-	
+
 }*numVersion;
 
 typedef struct _archivo
 {
 	char * nombre;
-
 	numVersion versiones;
-	
+
 }*Archivo;
 
 
@@ -44,7 +43,7 @@ TipoRet BorrarVersion(Archivo &a, char * version);
 
 TipoRet MostrarVersiones(Archivo a);
 
-TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * error);
+TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * &error);
 
 TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * error);
 
