@@ -27,6 +27,7 @@ int main()
     Cadena version = NULL;
     Cadena error = NULL;
     Posicion nroLinea;
+    char noEnter; //para evitar problema en opcion 5
     do {
         menu();
         cin >> numOper;
@@ -38,8 +39,6 @@ int main()
                   cin >> cadenaAux;
                   archivo=CrearArchivo(cadenaAux);
                   //delete cadenaAux;
-                  cout << "El nombre del archivo creado es " << archivo->nombre << endl;
-                  sleep(2);
                   break;
            case 2:
                   cout << "Se va a borrar el archivo: ";
@@ -51,17 +50,18 @@ int main()
                   cout << "Ingrese nombre de la version: ";
                   cadenaAux = new char [MAX_LARGO_LINEA];
                   cin >> cadenaAux;
-                  retorno = CrearVersion(archivo,cadenaAux, error); 
+                  retorno = CrearVersion(archivo,cadenaAux, error);
                   imprimirResultado(retorno, error);
                   sleep(2);
-                  break;   
+                  break;
 
             case 4:
-                  
+
+                  cout << archivo->nombre << endl;
                   mostrarVersiones(archivo->versiones,0);
                   sleep(2);
 
-                  break;        
+                  break;
 
            case 5:
                   linea = new char [MAX_LARGO_LINEA];
@@ -70,6 +70,9 @@ int main()
                   cout << "Ingrese el numero de linea a insertar (debe ser >= 1 y <= cant lineas): ";
                   //fflush(stdout);
                   cin >>  nroLinea;
+
+                  noEnter = getchar(); //evita problema al ingresar ENTER y tome a este como ingreso de linea
+
                   cout << "Ingrese la linea a insertar: ";
                   leerLinea(linea);
                   cout << "Ingrese version a modificar: ";
@@ -78,10 +81,21 @@ int main()
                   retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
                   imprimirResultado(retorno, error);
 
-                  delete linea;
-                  delete version;
-                  delete error;
+                  //delete linea;
+                  //delete version;
+                  //delete error;
                   break;
+
+            case 7:
+                  cout << "Ingrese version a mostrar: ";
+                  cadenaAux = new char [MAX_LARGO_LINEA];
+                  // fflush(stdin);
+                  cin >> cadenaAux;
+
+                  MostrarTexto(archivo, cadenaAux);
+                  sleep(2);
+                  break;
+
            case 11:
                   cout << "Esta seguro de que desea salir (s/n)?: ";
                   cin >> opcion;
@@ -124,13 +138,13 @@ void menu(){
 void imprimirResultado(TipoRet retorno, Cadena error) {
      switch(retorno){
         case OK:
-             cout << "Resultado: " << "OK" << endl;
+             cout << "OK: " << error << endl;
              break;
         case ERROR:
-             cout << "Resultado: " << "ERROR :" << error <<endl;
+             cout << "ERROR: " << error <<endl;
              break;
         case NO_IMPLEMENTADA:
-             cout << "Resultado: " << "NO_IMPLEMENTADA"<< endl;
+             cout << "NO_IMPLEMENTADA"<< endl;
              break;
      }
 }
@@ -143,5 +157,5 @@ void leerLinea(Cadena linea){
     fflush(stdin);
     cin.getline(linea, MAX_LARGO_LINEA);
 
-    printf("resultado:'%s'",linea);
+    printf("resultado:'%s'\n",linea);
 }

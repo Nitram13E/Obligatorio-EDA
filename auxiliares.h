@@ -10,3 +10,6 @@ numVersion defVersion(char*);
 
 bool typeVersion(char*);
 
+bool siguienteVersion(numVersion &, char * );
+
+line defLinea(char*, int);
