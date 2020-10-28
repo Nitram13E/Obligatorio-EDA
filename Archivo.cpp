@@ -19,11 +19,6 @@ TipoRet BorrarArchivo(Archivo &a)
     return NO_IMPLEMENTADA;
 }
 
-
-TipoRet BorrarArchivo(Archivo &a){
-    return NO_IMPLEMENTADA;
-}
-
 TipoRet CrearVersion(Archivo &a, char * version, char * &error){
 
      if (a == NULL)
@@ -169,6 +164,12 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
                 {
                 	anteriorExistente = lineaAuxiliar;
                 }
+                else if(lineaAuxiliar -> nroLinea == 1)
+                {
+                    anteriorExistente = defLinea(NULL, 1);
+                    anteriorExistente -> siguiente = lineaAuxiliar;
+                }
+
                 lineaAuxiliar = lineaAuxiliar -> siguiente;
             }
 
@@ -187,14 +188,13 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             }
             else
             {
-            
             	correrLineas(anteriorExistente -> siguiente);
             	
             	line nuevaLinea = new struct Linea;
-   						nuevaLinea ->contLinea = linea;
-    					nuevaLinea -> nroLinea = nroLinea;
-    					nuevaLinea -> siguiente = anteriorExistente -> siguiente;
-    					anteriorExistente -> siguiente = nuevaLinea;
+   				nuevaLinea ->contLinea = linea;
+    			nuevaLinea -> nroLinea = nroLinea;
+				nuevaLinea -> siguiente = anteriorExistente -> siguiente;
+				anteriorExistente -> siguiente = nuevaLinea;
             }
         }
 

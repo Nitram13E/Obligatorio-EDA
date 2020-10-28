@@ -152,7 +152,6 @@ void correrLineas(line &linea)
 	linea -> nroLinea += 1;
 	
 	correrLineas(linea -> siguiente); 
-	
 }
 
 
