@@ -45,7 +45,7 @@ TipoRet MostrarVersiones(Archivo a);
 
 TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * &error);
 
-TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * error);
+TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * &error);
 
 TipoRet  MostrarTexto(Archivo a, char * version);
 

@@ -51,26 +51,26 @@ void mostrarVersiones(numVersion version, int space)
 
 }
 
-// Busca al padre de la sub version a crear
-numVersion buscarPadre(numVersion padre, char * padre_num)
+// Busca a la version.
+numVersion buscarVersion(numVersion version, char * version_num)
 {
 
-    if (padre != NULL)
+    if (version != NULL)
     {
 
-        if (strcmp(padre->num_version, padre_num) == 0)
+        if (strcmp(version->num_version, version_num) == 0)
         {
-            return padre;
+            return version;
         }
 
 
-        if (padre->siguiente != NULL)
+        if (version->siguiente != NULL)
         {
-            return buscarPadre(padre->siguiente, padre_num);
+            return buscarVersion(version->siguiente, version_num);
         }
-        else if (padre -> subVersion != NULL)
+        else if (version -> subVersion != NULL)
         {
-            return buscarPadre(padre->subVersion, padre_num);
+            return buscarVersion(version->subVersion, version_num);
 
         }
 
@@ -145,13 +145,21 @@ line defLinea(char * contLinea, int nroLinea, line siguienteLinea)
 
 }
 
-void correrLineas(line &linea)
+void correrLineas(line &linea, bool signo)
 {
 	if (linea == NULL) return;
 	
-	linea -> nroLinea += 1;
-	
-	correrLineas(linea -> siguiente); 
+    if(signo)
+    {
+        linea -> nroLinea += 1;
+    }
+    else
+    {
+        linea -> nroLinea -= 1;
+    }
+    
+
+	correrLineas(linea -> siguiente, signo); 
 }
 
 
