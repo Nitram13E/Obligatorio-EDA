@@ -33,10 +33,6 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
     }
 
     numVersion header_version = a -> versiones;
-<<<<<<< HEAD
-    int length = strlen(version);
-=======
->>>>>>> 18df240ed87e63184e9fef848bc220c2bae021a8
 
 
     if (a->versiones == NULL)
@@ -138,11 +134,6 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
             }
 
         }
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 18df240ed87e63184e9fef848bc220c2bae021a8
     }
 
     return NO_IMPLEMENTADA;
