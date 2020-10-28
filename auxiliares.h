@@ -12,4 +12,6 @@ bool typeVersion(char*);
 
 bool siguienteVersion(numVersion &, char * );
 
-line defLinea(char*, int);
+line defLinea(char*, int, line);
+
+void correrLineas(line&);

@@ -152,27 +152,49 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
 
         if (headLine == NULL)
         {
-            versionToInsert -> contenido = defLinea(linea ,nroLinea);
+            versionToInsert -> contenido = defLinea(linea ,nroLinea, NULL);
         }
         else
         {
             line lineaAuxiliar = headLine;
+            line anteriorExistente = NULL;
             while (lineaAuxiliar -> siguiente != NULL)
             {
+                if (lineaAuxiliar -> siguiente -> nroLinea == nroLinea or lineaAuxiliar -> nroLinea == nroLinea) 
+                {
+                	anteriorExistente = lineaAuxiliar;
+                }
                 lineaAuxiliar = lineaAuxiliar -> siguiente;
             }
+            
+            if (lineaAuxiliar -> siguiente == NULL && lineaAuxiliar == headLine) anteriorExistente = lineaAuxiliar;
 
-            if ((lineaAuxiliar -> nroLinea) + 1 == nroLinea) {
-              lineaAuxiliar -> siguiente = defLinea(linea, nroLinea);
+            if (anteriorExistente == NULL)
+            {
+            	if ((lineaAuxiliar -> nroLinea) + 1 == nroLinea)
+            	{
+              	lineaAuxiliar -> siguiente = defLinea(linea, nroLinea, NULL);
+            	}
+            	else
+            	{
+              	error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
+              	return ERROR;
+            	}
+
             }
             else
             {
-
-              error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
-              return ERROR;
-
+            	if (anteriorExistente -> nroLinea == nroLinea)
+            	{
+            		correrLineas(anteriorExistente);
+		  					versionToInsert -> contenido = defLinea(linea,nroLinea, anteriorExistente);
+            	}
+            	else
+            	{
+            		correrLineas(anteriorExistente -> siguiente);
+		  					anteriorExistente -> siguiente = defLinea(linea, nroLinea, anteriorExistente -> siguiente);
+            	}
             }
-
         }
 
         error = "Linea insertada";

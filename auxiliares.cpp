@@ -133,14 +133,26 @@ bool siguienteVersion(numVersion &header_version, char * version)
 }
 
 
-line defLinea(char * contLinea, int nroLinea)
+line defLinea(char * contLinea, int nroLinea, line siguienteLinea)
 {
 
     line nuevaLinea = new struct Linea;
     nuevaLinea ->contLinea = contLinea;
     nuevaLinea -> nroLinea = nroLinea;
-    nuevaLinea -> siguiente = NULL;
+    nuevaLinea -> siguiente = siguienteLinea;
 
     return nuevaLinea;
 
 }
+
+void correrLineas(line &linea)
+{
+	if (linea == NULL) return;
+	
+	linea -> nroLinea += 1;
+	
+	correrLineas(linea -> siguiente); 
+	
+}
+
+
