@@ -152,7 +152,7 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
 
         if (headLine == NULL)
         {
-            versionToInsert -> contenido = defLinea(linea ,nroLinea);
+            versionToInsert -> contenido = defLinea(linea ,nroLinea, NULL);
         }
         else
         {
@@ -160,24 +160,21 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             line anteriorExistente = NULL;
             while (lineaAuxiliar -> siguiente != NULL)
             {
-                if (lineaAuxiliar -> siguiente -> nroLinea == nroLinea) 
+                if (lineaAuxiliar -> siguiente -> nroLinea == nroLinea or lineaAuxiliar -> nroLinea == nroLinea) 
                 {
                 	anteriorExistente = lineaAuxiliar;
                 }
-                else if(lineaAuxiliar -> nroLinea == 1)
-                {
-                    anteriorExistente = defLinea(NULL, 1);
-                    anteriorExistente -> siguiente = lineaAuxiliar;
-                }
-
+                
                 lineaAuxiliar = lineaAuxiliar -> siguiente;
             }
+            
+            if (lineaAuxiliar -> siguiente == NULL && lineaAuxiliar == headLine) anteriorExistente = lineaAuxiliar;
 
             if (anteriorExistente == NULL)
             {
             	if ((lineaAuxiliar -> nroLinea) + 1 == nroLinea)
             	{
-              	lineaAuxiliar -> siguiente = defLinea(linea, nroLinea);
+              	lineaAuxiliar -> siguiente = defLinea(linea, nroLinea, NULL);
             	}
             	else
             	{
@@ -188,13 +185,16 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             }
             else
             {
-            	correrLineas(anteriorExistente -> siguiente);
-            	
-            	line nuevaLinea = new struct Linea;
-   				nuevaLinea ->contLinea = linea;
-    			nuevaLinea -> nroLinea = nroLinea;
-				nuevaLinea -> siguiente = anteriorExistente -> siguiente;
-				anteriorExistente -> siguiente = nuevaLinea;
+            	if (anteriorExistente -> nroLinea == nroLinea)
+            	{
+            		correrLineas(anteriorExistente);
+		  					versionToInsert -> contenido = defLinea(linea,nroLinea, anteriorExistente);
+            	}
+            	else
+            	{
+            		correrLineas(anteriorExistente -> siguiente);
+		  					anteriorExistente -> siguiente = defLinea(linea, nroLinea, anteriorExistente -> siguiente);
+            	}
             }
         }
 
