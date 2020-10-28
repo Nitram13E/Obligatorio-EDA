@@ -85,6 +85,28 @@ int main()
                   //delete version;
                   //delete error;
                   break;
+            case 6:
+
+                  linea = new char [MAX_LARGO_LINEA];
+                  version = new char [MAX_LARGO_LINEA];
+                  error = new char [MAX_LARGO_LINEA];
+                  cout << "Ingrese el numero de linea a eliminar (la linea debe existir en el archivo): ";
+                  //fflush(stdout);
+                  cin >>  nroLinea;
+
+                  noEnter = getchar(); //evita problema al ingresar ENTER y tome a este como ingreso de linea
+
+                  cout << "Ingrese version a eliminar: ";
+                  leerLinea(version);
+
+                  retorno = BorrarLinea(archivo, version, nroLinea, error);
+                  imprimirResultado(retorno, error);
+
+                  //delete linea;
+                  //delete version;
+                  //delete error;
+                  break;
+
 
             case 7:
                   cout << "Ingrese version a mostrar: ";

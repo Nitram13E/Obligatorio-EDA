@@ -14,4 +14,4 @@ bool siguienteVersion(numVersion &, char * );
 
 line defLinea(char*, int, line);
 
-void correrLineas(line&);
+void correrLineas(line&, bool);

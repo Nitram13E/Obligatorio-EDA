@@ -14,7 +14,8 @@ Archivo CrearArchivo(char * nombre){
     return nuevoArchivo;
 }
 
-TipoRet BorrarArchivo(Archivo &a){
+TipoRet BorrarArchivo(Archivo &a)
+{
     return NO_IMPLEMENTADA;
 }
 
@@ -78,9 +79,9 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
             }
             //lo que se hace en aux padre es buscar al padre de la subversion a crear
             //Por ejemplo: si la subversion es 1.1.1, auxPadre = 1.1
-            //Este valor se utilizara en buscarPadre
+            //Este valor se utilizara en buscarVersion.
 
-            numVersion padre = buscarPadre(a->versiones, auxPadre);
+            numVersion padre = buscarVersion(a->versiones, auxPadre);
 
 
             if (padre != NULL) //En caso de que el padre exista
@@ -128,7 +129,6 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
             }
 
         }
-
     }
 
     return NO_IMPLEMENTADA;
@@ -144,7 +144,7 @@ TipoRet MostrarVersiones(Archivo a){
 
 TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * &error){
 
-    numVersion versionToInsert = buscarPadre(a -> versiones, version);
+    numVersion versionToInsert = buscarVersion(a -> versiones, version);
 
     if (versionToInsert != NULL && versionToInsert -> siguiente == NULL && versionToInsert->subVersion == NULL)
     {
@@ -160,10 +160,11 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             line anteriorExistente = NULL;
             while (lineaAuxiliar -> siguiente != NULL)
             {
-                if (lineaAuxiliar -> siguiente -> nroLinea == nroLinea or lineaAuxiliar -> nroLinea == nroLinea) 
+                if (lineaAuxiliar -> siguiente -> nroLinea == nroLinea || lineaAuxiliar -> nroLinea == nroLinea) 
                 {
                 	anteriorExistente = lineaAuxiliar;
                 }
+
                 lineaAuxiliar = lineaAuxiliar -> siguiente;
             }
             
@@ -186,12 +187,12 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             {
             	if (anteriorExistente -> nroLinea == nroLinea)
             	{
-            		correrLineas(anteriorExistente);
+            		correrLineas(anteriorExistente, true);
 		  					versionToInsert -> contenido = defLinea(linea,nroLinea, anteriorExistente);
             	}
             	else
             	{
-            		correrLineas(anteriorExistente -> siguiente);
+            		correrLineas(anteriorExistente -> siguiente, true);
 		  					anteriorExistente -> siguiente = defLinea(linea, nroLinea, anteriorExistente -> siguiente);
             	}
             }
@@ -210,13 +211,54 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
     return NO_IMPLEMENTADA;
 }
 
-TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * error){
+TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  &error){
+    
+    numVersion versionToInsert = buscarVersion(a -> versiones, version);
+
+    if(versionToInsert != NULL && versionToInsert -> siguiente == NULL && versionToInsert->subVersion == NULL)
+    {
+        line headLine = versionToInsert -> contenido;
+        line toDelete = NULL;
+
+        if(headLine != NULL)
+        {
+            if(nroLinea == headLine -> nroLinea)
+            {
+                correrLineas(headLine ->siguiente, false);
+                versionToInsert->contenido = headLine -> siguiente;
+                delete headLine;
+            }
+            else
+            {
+                while (headLine -> siguiente != NULL && headLine -> siguiente -> nroLinea != nroLinea)
+                {                    
+                    headLine = headLine -> siguiente;
+                }
+
+                toDelete = headLine -> siguiente;
+                correrLineas(headLine -> siguiente, false);
+                headLine -> siguiente = headLine -> siguiente -> siguiente;
+
+                delete toDelete;
+                
+            }
+            error = "linea %i eliminada.", nroLinea;
+            return OK;
+        }
+        else
+        {
+            error = "Version sin lineas";
+            return ERROR;
+        }
+        
+    }
+    
     return NO_IMPLEMENTADA;
 }
 
 TipoRet  MostrarTexto(Archivo a, char * version){
 
-    numVersion fileVersion = buscarPadre(a->versiones, version);
+    numVersion fileVersion = buscarVersion(a->versiones, version);
 
     line content = fileVersion->contenido;
 
