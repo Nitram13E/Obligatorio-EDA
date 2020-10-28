@@ -144,3 +144,15 @@ line defLinea(char * contLinea, int nroLinea)
     return nuevaLinea;
 
 }
+
+void correrLineas(line &linea)
+{
+	if (linea == NULL) return;
+	
+	linea -> nroLinea += 1;
+	
+	correrLineas(linea -> siguiente); 
+	
+}
+
+
