@@ -156,25 +156,30 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
         }
         else
         {
-            line lineaAuxiliar = headLine;
-            line anteriorExistente = NULL;
-            while (lineaAuxiliar -> siguiente != NULL)
-            {
-                if (lineaAuxiliar -> siguiente -> nroLinea == nroLinea || lineaAuxiliar -> nroLinea == nroLinea) 
-                {
-                	anteriorExistente = lineaAuxiliar;
-                }
-
-                lineaAuxiliar = lineaAuxiliar -> siguiente;
-            }
+            line lineaIteradora = headLine;
             
-            if (lineaAuxiliar -> siguiente == NULL && lineaAuxiliar == headLine) anteriorExistente = lineaAuxiliar;
-
-            if (anteriorExistente == NULL)
-            {
-            	if ((lineaAuxiliar -> nroLinea) + 1 == nroLinea)
+            	if (headLine -> nroLinea != nroLinea)
             	{
-              	lineaAuxiliar -> siguiente = defLinea(linea, nroLinea, NULL);
+            		while (lineaIteradora -> siguiente != NULL && lineaIteradora -> siguiente -> nroLinea != nroLinea)
+           			{
+                	lineaIteradora = lineaIteradora -> siguiente;
+            		}
+            	}
+							
+							
+							if (headLine -> nroLinea == nroLinea)
+           		{
+           			correrLineas(lineaIteradora, true);
+		  					versionToInsert -> contenido = defLinea(linea,nroLinea, lineaIteradora);
+           		}
+           		else if (lineaIteradora -> siguiente != NULL)
+           		{
+           			correrLineas(lineaIteradora -> siguiente, true);
+		  					lineaIteradora -> siguiente = defLinea(linea, nroLinea, lineaIteradora -> siguiente);
+            	}
+							else if ((lineaIteradora -> nroLinea) + 1 == nroLinea)
+            	{
+              	lineaIteradora -> siguiente = defLinea(linea, nroLinea, NULL);
             	}
             	else
             	{
@@ -182,20 +187,7 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
               	return ERROR;
             	}
 
-            }
-            else
-            {
-            	if (anteriorExistente -> nroLinea == nroLinea)
-            	{
-            		correrLineas(anteriorExistente, true);
-		  					versionToInsert -> contenido = defLinea(linea,nroLinea, anteriorExistente);
-            	}
-            	else
-            	{
-            		correrLineas(anteriorExistente -> siguiente, true);
-		  					anteriorExistente -> siguiente = defLinea(linea, nroLinea, anteriorExistente -> siguiente);
-            	}
-            }
+            
         }
 
         error = "Linea insertada";
