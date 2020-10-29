@@ -3,52 +3,24 @@
 #include <stdio.h>
 #include <string.h>
 
-//Veifica si la version ingresa existe
-bool existeVersion(numVersion versiones, char * version)
-{
-
-    if (versiones != NULL)
-    {
-
-        if (versiones->num_version == version)
-        {
-            return true;
-        }
-
-        existeVersion(versiones -> siguiente, version);
-        existeVersion(versiones -> subVersion, version);
-
-    }
-
-
-    return false;
-
-
-}
-
 // muestra versiones
-void mostrarVersiones(numVersion version, int space)
+void imprimirVersiones(numVersion version, int tab)
 {
-
     if (version == NULL)
 
-      return;
+        return;
 
-   space += 2;
-
-   mostrarVersiones(version->siguiente, space);
-
-   for (int i = 2; i < space; i++){
-
-       printf("   ");
-
-   }
-
-
-   printf("%s\n",version -> num_version);
-
-   mostrarVersiones(version->subVersion, space);
-
+    imprimirVersiones(version -> siguiente, tab);
+    
+    tab += 2;
+    for (int i = 0; i < tab; i++)
+    {
+        printf("\t");
+    }
+    
+    printf("%s\n", version -> num_version);
+    
+    imprimirVersiones(version -> subVersion, tab);
 }
 
 // Busca a la version.
@@ -131,6 +103,71 @@ bool siguienteVersion(numVersion &header_version, char * version)
 
         return false;
 }
+
+void borrarVersiones(numVersion &version)
+{
+    if (version == NULL)
+    {
+        return;
+    }
+
+    if (!typeVersion(version -> num_version))
+    {
+       borrarVersiones(version -> siguiente);
+    }
+
+    borrarVersiones(version -> subVersion);
+
+    if (typeVersion(version -> num_version))
+    {
+       delete version; 
+    }
+    else
+    {
+        delete version;
+    }
+}
+
+void reasignarVersiones(numVersion &version, bool signo)
+{
+	if (version == NULL) return;
+	
+    char * num_version = version -> siguiente -> num_version;
+
+    if (typeVersion(version -> num_version))
+    {
+        if(signo)
+        {
+            num_version += '1';
+        }
+        else
+        {
+            num_version -= '1';
+        }
+    }
+    else
+    {
+        if(signo)
+        {
+            num_version[strlen(num_version)] += '1';
+        }
+        else
+        {
+            num_version[strlen(num_version)] -= '1';
+        }
+    }
+    
+	reasignarVersiones(version -> siguiente, signo);
+}
+
+
+
+
+
+
+
+
+//Funciones para Linea
 
 
 line defLinea(char * contLinea, int nroLinea, line siguienteLinea)

@@ -80,7 +80,6 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
             //lo que se hace en aux padre es buscar al padre de la subversion a crear
             //Por ejemplo: si la subversion es 1.1.1, auxPadre = 1.1
             //Este valor se utilizara en buscarVersion.
-
             numVersion padre = buscarVersion(a->versiones, auxPadre);
 
 
@@ -105,7 +104,7 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
                 else
                 {
                  //Si el padre no tiene sub version, significa que la version a crear sera la primera.
-                    if (version[0] == '1')
+                    if (version[strlen(version) - 1] == '1')
                     {
                         padre -> subVersion = defVersion(version);
 
@@ -135,11 +134,34 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
 }
 
 TipoRet BorrarVersion(Archivo &a, char * version){
-    return NO_IMPLEMENTADA;
+
+    numVersion toDelete = buscarVersion(a -> versiones, version);
+    
+    if (toDelete == NULL)
+    {
+        return ERROR;
+    }
+
+    if (typeVersion(toDelete -> num_version))
+    {
+        reasignarVersiones(toDelete -> siguiente, true);
+    }
+    else
+    {
+        reasignarVersiones(toDelete -> siguiente, false);
+    }
+    
+    borrarVersiones(toDelete);
+
+    return OK;
+
 }
 
 TipoRet MostrarVersiones(Archivo a){
-    return NO_IMPLEMENTADA;
+
+    imprimirVersiones(a -> versiones, 0);
+    
+    return OK;
 }
 
 TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * &error){
