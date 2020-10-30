@@ -20,6 +20,7 @@ typedef struct Version
 	char * num_version;
 	line contenido;
 	struct Version * siguiente;
+	struct Version * anterior;
 	struct Version * subVersion;
 
 }*numVersion;
