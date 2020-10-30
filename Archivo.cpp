@@ -34,7 +34,7 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
     {
         if (version[0] == '1' && strlen(version) == 1)
         {
-            a -> versiones = defVersion(version);
+            a -> versiones = defVersion(version,NULL,NULL,NULL);
 
             error = "version creada";
             return OK;
@@ -71,16 +71,7 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
         {
             //Sub Versiones
 
-            char * auxPadre = new char[strlen(version) - 2];
-
-            for (int i = 0; i < strlen(version)-2; i++)
-            {
-                auxPadre[i] = version[i];
-            }
-            //lo que se hace en aux padre es buscar al padre de la subversion a crear
-            //Por ejemplo: si la subversion es 1.1.1, auxPadre = 1.1
-            //Este valor se utilizara en buscarVersion.
-            numVersion padre = buscarVersion(a->versiones, auxPadre);
+            numVersion padre = buscarPadre(a->versiones, version);
 
 
             if (padre != NULL) //En caso de que el padre exista
@@ -106,7 +97,7 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error){
                  //Si el padre no tiene sub version, significa que la version a crear sera la primera.
                     if (version[strlen(version) - 1] == '1')
                     {
-                        padre -> subVersion = defVersion(version);
+                        padre -> subVersion = defVersion(version,NULL,NULL,NULL);
 
                         error = "subversion creada";
                         return OK;
@@ -141,17 +132,22 @@ TipoRet BorrarVersion(Archivo &a, char * version){
     {
         return ERROR;
     }
-
-    if (typeVersion(toDelete -> num_version))
+    
+    toDelete -> anterior -> siguiente = toDelete -> siguiente;
+    toDelete -> siguiente -> anterior = toDelete -> anterior;
+    
+    
+    if (typeVersion(version))
     {
-        reasignarVersiones(toDelete -> siguiente, true);
+    	reasignarVersiones(toDelete -> siguiente, 0, false);
+    	borrarVersiones(toDelete);
     }
     else
     {
-        reasignarVersiones(toDelete -> siguiente, false);
+    	numVersion padre = buscarPadre(a -> versiones, version);
+    	reasignarVersiones(toDelete -> siguiente, strlen(padre -> num_version) + 1, false);	 
+    	borrarSubVersiones(toDelete);
     }
-    
-    borrarVersiones(toDelete);
 
     return OK;
 
@@ -189,24 +185,24 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             	}
 							
 							
-							if (headLine -> nroLinea == nroLinea)
+				if (headLine -> nroLinea == nroLinea)
            		{
            			correrLineas(lineaIteradora, true);
-		  					versionToInsert -> contenido = defLinea(linea,nroLinea, lineaIteradora);
+		  			versionToInsert -> contenido = defLinea(linea,nroLinea, lineaIteradora);
            		}
            		else if (lineaIteradora -> siguiente != NULL)
            		{
            			correrLineas(lineaIteradora -> siguiente, true);
-		  					lineaIteradora -> siguiente = defLinea(linea, nroLinea, lineaIteradora -> siguiente);
+		  		    lineaIteradora -> siguiente = defLinea(linea, nroLinea, lineaIteradora -> siguiente);
             	}
-							else if ((lineaIteradora -> nroLinea) + 1 == nroLinea)
+				else if ((lineaIteradora -> nroLinea) + 1 == nroLinea)
             	{
-              	lineaIteradora -> siguiente = defLinea(linea, nroLinea, NULL);
+              	    lineaIteradora -> siguiente = defLinea(linea, nroLinea, NULL);
             	}
             	else
             	{
-              	error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
-              	return ERROR;
+              	    error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
+              	    return ERROR;
             	}
 
             

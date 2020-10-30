@@ -57,6 +57,7 @@ int main()
 
             case 4:
 
+                  BorrarVersion(archivo, "1.2");
                   cout << archivo->nombre << endl;
                   MostrarVersiones(archivo);
                   sleep(2);

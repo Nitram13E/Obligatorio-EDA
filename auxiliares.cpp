@@ -20,6 +20,7 @@ void imprimirVersiones(numVersion version, int tab)
     
     printf("%s\n", version -> num_version);
     
+    
     imprimirVersiones(version -> subVersion, tab);
 }
 
@@ -52,14 +53,32 @@ numVersion buscarVersion(numVersion version, char * version_num)
     return NULL;
 }
 
+
+numVersion buscarPadre(numVersion version, char * version_num)
+{
+	char * auxPadre = new char[strlen(version_num) - 2];
+
+	for (int i = 0; i < strlen(version_num)-2; i++)
+	{
+			auxPadre[i] = version_num[i];
+	}
+	//lo que se hace en aux padre es buscar al padre de la subversion a crear
+	//Por ejemplo: si la subversion es 1.1.1, auxPadre = 1.1
+	//Este valor se utilizara en buscarVersion.
+	numVersion padre = buscarVersion(version, auxPadre);
+	
+	return padre;
+}
+
 //Estructura para crear una nueva version
-numVersion defVersion(char * version)
+numVersion defVersion(char * version, numVersion siguiente, numVersion anterior, numVersion subVersion)
 {
     numVersion nuevaVersion = new struct Version;
 
     nuevaVersion -> num_version = version;
-    nuevaVersion -> siguiente = NULL;
-    nuevaVersion -> subVersion = NULL;
+    nuevaVersion -> siguiente = siguiente;
+    nuevaVersion -> anterior = anterior;
+    nuevaVersion -> subVersion = subVersion;
 
     return nuevaVersion;
 }
@@ -97,7 +116,7 @@ bool siguienteVersion(numVersion &header_version, char * version)
 
         if (lastCharVersion - lastCharNode == 1)
         {
-            auxiliar -> siguiente = defVersion(version);
+            auxiliar -> siguiente = defVersion(version,NULL,auxiliar, NULL);
             return true;
         }
 
@@ -128,36 +147,52 @@ void borrarVersiones(numVersion &version)
     }
 }
 
-void reasignarVersiones(numVersion &version, bool signo)
+void borrarSubVersiones(numVersion &version)
+{
+    if (version == NULL)
+    {
+        return;
+    }
+
+    borrarVersiones(version -> subVersion);
+
+   	delete version;
+    
+}
+
+void reasignarVersiones(numVersion &version, int posiciones_padre, bool signo)
 {
 	if (version == NULL) return;
 	
-    char * num_version = version -> siguiente -> num_version;
+   char * num_version = version -> num_version;
 
-    if (typeVersion(version -> num_version))
-    {
-        if(signo)
-        {
-            num_version += '1';
-        }
-        else
-        {
-            num_version -= '1';
-        }
-    }
-    else
-    {
-        if(signo)
-        {
-            num_version[strlen(num_version)] += '1';
-        }
-        else
-        {
-            num_version[strlen(num_version)] -= '1';
-        }
-    }
+   if (posiciones_padre == 0)
+   {
+		 	if(signo)
+		  {
+		      num_version[0] ++;
+		  }
+		  else
+		  {
+		      num_version[0] --;
+		  }  
+   }
+   else
+   {
+   		if(signo)
+		  {
+		      num_version[posiciones_padre] ++;
+		  }
+		  else
+		  {
+		      num_version[posiciones_padre] --;
+		  }
+   }
+  
     
-	reasignarVersiones(version -> siguiente, signo);
+	reasignarVersiones(version -> siguiente, posiciones_padre, signo);
+  reasignarVersiones(version -> subVersion, posiciones_padre, signo);
+  
 }
 
 
