@@ -1,8 +1,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdio.h>
-#include <unistd.h>
-
 #include "Archivo.h"
 #include "Constantes.h"
 #include "auxiliares.h"
@@ -31,19 +29,36 @@ int main()
     do {
         menu();
         cin >> numOper;
+        system("clear");
         switch (numOper){
             case 1:
                   cout << "Ingrese nombre del archivo a crear: ";
                   cadenaAux = new char [MAX_LARGO_LINEA];
                  // fflush(stdin);
                   cin >> cadenaAux;
-                  archivo=CrearArchivo(cadenaAux);
+                  if (archivo == NULL)
+                  {
+                    archivo=CrearArchivo(cadenaAux);
+                  }
+                  else
+                  {
+                      cout << "\nYa existe un archivo.\n";
+                  }
                   //delete cadenaAux;
+
                   break;
            case 2:
-                  cout << "Se va a borrar el archivo: ";
+                if(archivo != NULL)
+                {
+                  cout << "Se va a borrar el archivo: " << archivo -> nombre << "\n";
                   retorno = BorrarArchivo(archivo);
-                  imprimirResultado(retorno, error);
+                  imprimirResultado(retorno, "");
+                }
+                else
+                {
+                  cout << "No existe ningun archivo.\n";
+                }
+                
                   break;
 
             case 3:
@@ -52,7 +67,6 @@ int main()
                   cin >> cadenaAux;
                   retorno = CrearVersion(archivo,cadenaAux, error);
                   imprimirResultado(retorno, error);
-                  sleep(2);
                   break;
 
             case 4:
@@ -60,7 +74,6 @@ int main()
                   BorrarVersion(archivo, "1.2");
                   cout << archivo->nombre << endl;
                   MostrarVersiones(archivo);
-                  sleep(2);
 
                   break;
 
@@ -116,7 +129,6 @@ int main()
                   cin >> cadenaAux;
 
                   MostrarTexto(archivo, cadenaAux);
-                  sleep(2);
                   break;
 
            case 11:
@@ -129,11 +141,11 @@ int main()
                   break;
            default:
                    cout << numOper<<"No ingreso una opcion valida, vuelva a intentarlo...\n";
-                   //getchar();
 
         }
         cout << "\n";
         cout << "Presione Enter Para continuar\n";
+        getchar();
         getchar();
         system("clear");
     } while (!salir);
