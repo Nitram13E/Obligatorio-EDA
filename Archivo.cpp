@@ -16,7 +16,13 @@ Archivo CrearArchivo(char * nombre){
 
 TipoRet BorrarArchivo(Archivo &a)
 {
-    return NO_IMPLEMENTADA;
+    borrarVersiones(a -> versiones);
+
+    delete a -> nombre;
+    delete a -> versiones;
+    a = NULL;
+
+    return OK;
 }
 
 TipoRet CrearVersion(Archivo &a, char * version, char * &error){
