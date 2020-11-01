@@ -56,9 +56,19 @@ numVersion buscarVersion(numVersion version, char * version_num)
 
 numVersion buscarPadre(numVersion version, char * version_num)
 {
-	char * auxPadre = new char[strlen(version_num) - 2];
+	int child_length = 0; 
+	int i = strlen(version_num) - 1;
+	
+	while (version_num[i] != '.')
+	{
+		child_length++, i--;
+	}
+	
+	child_length = strlen(version_num) - (child_length + 1);
+	
+	char * auxPadre = new char[child_length];
 
-	for (int i = 0; i < strlen(version_num)-2; i++)
+	for (int i = 0; i < child_length; i++)
 	{
 			auxPadre[i] = version_num[i];
 	}
@@ -101,6 +111,30 @@ bool typeVersion(char * version)
 
 }
 
+int lastToNumber(char * version)
+{
+	int dot = 0, i = 0;
+	char * number = new char[strlen(version)];
+	
+	for (int i = 0; i < strlen(version); i += 1)
+	{
+		if (version[i] == '.')
+		{
+			dot = i+1;
+		}
+	}
+	
+	while (version[dot] != '\0')
+	{
+		number[i] = version[dot];
+		dot++, i++;
+	}
+	
+	return atoi(number);
+	
+}
+
+
 //Se inserta una nueva sub version como siguiente del ultimo hermano
 bool siguienteVersion(numVersion &header_version, char * version)
 {
@@ -111,8 +145,8 @@ bool siguienteVersion(numVersion &header_version, char * version)
             auxiliar = auxiliar -> siguiente;
         }
 
-        int lastCharNode = auxiliar -> num_version[strlen(auxiliar -> num_version) - 1];
-        int lastCharVersion = version[strlen(version) - 1];
+        int lastCharNode = lastToNumber(auxiliar -> num_version);
+        int lastCharVersion = lastToNumber(version);
 
         if (lastCharVersion - lastCharNode == 1)
         {
