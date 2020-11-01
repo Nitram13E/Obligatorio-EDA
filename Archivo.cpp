@@ -303,8 +303,35 @@ TipoRet  MostrarCambios(Archivo a, char * version){
     return NO_IMPLEMENTADA;
 }
 
-TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales){
-    return NO_IMPLEMENTADA;
+TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales)
+{
+    numVersion version_1 = buscarVersion(a -> versiones, version1);
+    numVersion version_2 = buscarVersion(a -> versiones, version2);
+
+    line contentV1 = version_1 -> contenido;
+    line contentV2 = version_2 -> contenido;
+
+    iguales = true;
+
+    if (contentV1 == NULL || contentV2 == NULL)
+    {
+        return ERROR;
+    }
+    else
+    {
+        while (iguales && contentV1 != NULL && contentV2 != NULL)
+        {
+            if (strcmp(contentV1 -> contLinea, contentV2 -> contLinea) != 0)
+            {
+                iguales = false;
+            }
+            
+            contentV1 = contentV1 -> siguiente;
+            contentV2 = contentV2 -> siguiente;
+        }
+
+        return OK;
+    }
 }
 
 TipoRet  VersionIndependiente(Archivo &a, char * version){
