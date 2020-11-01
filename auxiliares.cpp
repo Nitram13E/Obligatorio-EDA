@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 // muestra versiones
 void imprimirVersiones(numVersion version, int tab)
 {
@@ -89,6 +88,7 @@ numVersion defVersion(char * version, numVersion siguiente, numVersion anterior,
     nuevaVersion -> siguiente = siguiente;
     nuevaVersion -> anterior = anterior;
     nuevaVersion -> subVersion = subVersion;
+    nuevaVersion -> cambio = NULL;
 
     return nuevaVersion;
 }
@@ -229,8 +229,48 @@ void reasignarVersiones(numVersion &version, int posiciones_padre, bool signo)
   
 }
 
+cambio defCambio(bool tipo, char * version, char * linea)
+{
+    cambio newCambio = new struct Cambio;
 
+    if (tipo)
+    {
+        newCambio -> tipo = "IL";
+    }
+    else
+    {
+        newCambio -> tipo = "BL";
+    }
+    
+    newCambio -> num_version = version;
+    newCambio -> linea = linea;
 
+    return newCambio;
+}
+
+void agregarCambio(numVersion versionToInsert, bool tipo_cambio, char * linea, unsigned int nroLinea)
+{
+    printf("entra agregarCambio");
+    cambio indexCambio = versionToInsert -> cambio;
+    
+    if (indexCambio != NULL)
+    {
+        printf("entra if agregarCambio");
+
+        while (indexCambio != NULL)
+        {
+            indexCambio -> siguiente;
+        }
+
+        indexCambio = defCambio(tipo_cambio, indexCambio -> num_version, linea);
+    }
+    else
+    {
+        printf("entra else agregarCambio");
+        versionToInsert -> cambio = defCambio(tipo_cambio, indexCambio -> num_version, linea);
+
+    }
+}
 
 
 
@@ -267,3 +307,4 @@ void correrLineas(line &linea, bool signo)
 
 	correrLineas(linea -> siguiente, signo); 
 }
+

@@ -26,6 +26,9 @@ int main()
     Cadena error = NULL;
     Posicion nroLinea;
     char noEnter; //para evitar problema en opcion 5
+
+    bool iguales = true;
+    
     do {
         menu();
         cin >> numOper;
@@ -131,15 +134,23 @@ int main()
                   MostrarTexto(archivo, cadenaAux);
                   break;
             
+            case 8:
+                  cout << "Ingrese version: ";
+                  version = new char [MAX_LARGO_LINEA];
+                  cin >> version;
+
+                  MostrarCambios(archivo, version);
+                  break;
+
             case 9:
                   cout << "Ingrese version 1: ";
                   cadenaAux = new char [MAX_LARGO_LINEA];
-                  // fflush(stdin);
                   cin >> cadenaAux;
+                  
                   cout << "Ingrese version 2: ";
                   version = new char [MAX_LARGO_LINEA];
                   cin >> version;
-                  bool iguales;
+
                   Iguales(archivo, cadenaAux, version, iguales);
                   cout << "resultado: " << iguales;
                   break;

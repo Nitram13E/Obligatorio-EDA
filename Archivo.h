@@ -15,6 +15,15 @@ typedef struct Linea
 
 }*line;
 
+typedef struct Cambio
+{
+	bool tipo;
+	char * num_version;
+	char * linea;
+	struct Cambio * siguiente;
+
+}*cambio;
+
 typedef struct Version
 {
 	char * num_version;
@@ -22,6 +31,7 @@ typedef struct Version
 	struct Version * siguiente;
 	struct Version * anterior;
 	struct Version * subVersion;
+	struct Cambio * cambio;
 
 }*numVersion;
 

@@ -170,7 +170,7 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
 
     numVersion versionToInsert = buscarVersion(a -> versiones, version);
 
-    if (versionToInsert != NULL && versionToInsert -> siguiente == NULL && versionToInsert->subVersion == NULL)
+    if (versionToInsert != NULL && versionToInsert->subVersion == NULL)
     {
         line headLine = versionToInsert->contenido;
 
@@ -209,12 +209,13 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             	{
               	    error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
               	    return ERROR;
-            	}
-
-            
+            	}            
         }
 
         error = "Linea insertada";
+
+        //agregarCambio(versionToInsert, true, linea, nroLinea);
+
         return OK;
     }
     else
@@ -276,31 +277,63 @@ TipoRet  MostrarTexto(Archivo a, char * version){
 
     numVersion fileVersion = buscarVersion(a->versiones, version);
 
-    line content = fileVersion->contenido;
-
-    if (content == NULL)
+    if(fileVersion != NULL)
     {
-      printf("Version sin contenido\n");
+        line content = fileVersion->contenido;
+
+        printf("%s - %s\n\n", a -> nombre, fileVersion -> num_version);
+
+        if (content == NULL)
+        {
+            printf("Version sin contenido\n");
+        }
+        else
+        {
+
+            while (content != NULL)
+            {
+                printf("%d\t%s\n", content->nroLinea, content->contLinea);
+                content = content->siguiente;
+            }
+
+        }
+
+        return OK;
+    }
+
+    return ERROR;
+}
+
+TipoRet  MostrarCambios(Archivo a, char * version)
+{
+    numVersion fileVersion = buscarVersion(a -> versiones, version);
+
+    if(fileVersion != NULL)
+    {
+        cambio indexCambio = fileVersion -> cambio;
+
+        if(indexCambio != NULL)
+        {
+            while (indexCambio != NULL)
+            {
+                printf("MostrarCambios while");
+                printf("%s\t%s\t%s", indexCambio -> tipo, indexCambio -> num_version, indexCambio -> linea);
+                
+                indexCambio = indexCambio -> siguiente;
+            }
+        }
+        else
+        {
+            printf("No se realizaron modificaciones");
+        }
+        return OK;
     }
     else
     {
-
-      while (content != NULL)
-      {
-          printf("%d \t %s\n", content->nroLinea, content->contLinea);
-          content = content->siguiente;
-      }
-
+        return ERROR;
     }
-
-
-
-
-    return NO_IMPLEMENTADA;
-}
-
-TipoRet  MostrarCambios(Archivo a, char * version){
-    return NO_IMPLEMENTADA;
+    
+    
 }
 
 TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales)
@@ -310,8 +343,6 @@ TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales)
 
     line contentV1 = version_1 -> contenido;
     line contentV2 = version_2 -> contenido;
-
-    iguales = true;
 
     if (contentV1 == NULL || contentV2 == NULL)
     {
