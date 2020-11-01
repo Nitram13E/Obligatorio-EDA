@@ -267,5 +267,3 @@ void correrLineas(line &linea, bool signo)
 
 	correrLineas(linea -> siguiente, signo); 
 }
-
-
