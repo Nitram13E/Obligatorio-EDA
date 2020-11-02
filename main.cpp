@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "Archivo.h"
 #include "Constantes.h"
-#include "auxiliares.h"
 
 using namespace std;
 
@@ -27,7 +26,7 @@ int main()
     Posicion nroLinea;
     char noEnter; //para evitar problema en opcion 5
 
-    bool iguales = true;
+    bool iguales;
     
     do {
         menu();
@@ -153,6 +152,7 @@ int main()
 
                   Iguales(archivo, cadenaAux, version, iguales);
                   cout << "resultado: " << iguales;
+
                   break;
 
            case 11:

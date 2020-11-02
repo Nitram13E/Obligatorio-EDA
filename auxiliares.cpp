@@ -12,6 +12,7 @@ void imprimirVersiones(numVersion version, int tab)
     imprimirVersiones(version -> siguiente, tab);
     
     tab += 2;
+    
     for (int i = 0; i < tab; i++)
     {
         printf("\t");
@@ -19,22 +20,18 @@ void imprimirVersiones(numVersion version, int tab)
     
     printf("%s\n", version -> num_version);
     
-    
     imprimirVersiones(version -> subVersion, tab);
 }
 
 // Busca a la version.
 numVersion buscarVersion(numVersion version, char * version_num)
 {
-
     if (version != NULL)
     {
-
         if (strcmp(version->num_version, version_num) == 0)
         {
             return version;
         }
-
 
         if (version->siguiente != NULL)
         {
@@ -43,11 +40,9 @@ numVersion buscarVersion(numVersion version, char * version_num)
         else if (version -> subVersion != NULL)
         {
             return buscarVersion(version->subVersion, version_num);
-
         }
 
     }
-
 
     return NULL;
 }
@@ -97,7 +92,6 @@ numVersion defVersion(char * version, numVersion siguiente, numVersion anterior,
 //Devuelve si la version ingresada es main o sub version
 bool typeVersion(char * version)
 {
-
     for (int i = 0; i < strlen(version); i++)
     {
         if (version[i] == '.')
@@ -108,7 +102,6 @@ bool typeVersion(char * version)
     }
 
     return true;
-
 }
 
 int lastToNumber(char * version)
@@ -131,30 +124,29 @@ int lastToNumber(char * version)
 	}
 	
 	return atoi(number);
-	
 }
 
 
 //Se inserta una nueva sub version como siguiente del ultimo hermano
 bool siguienteVersion(numVersion &header_version, char * version)
 {
-        numVersion auxiliar = header_version;
+    numVersion auxiliar = header_version;
 
-        while (auxiliar->siguiente != NULL)
-        {
-            auxiliar = auxiliar -> siguiente;
-        }
+    while (auxiliar->siguiente != NULL)
+    {
+        auxiliar = auxiliar -> siguiente;
+    }
 
-        int lastCharNode = lastToNumber(auxiliar -> num_version);
-        int lastCharVersion = lastToNumber(version);
+    int lastCharNode = lastToNumber(auxiliar -> num_version);
+    int lastCharVersion = lastToNumber(version);
 
-        if (lastCharVersion - lastCharNode == 1)
-        {
-            auxiliar -> siguiente = defVersion(version,NULL,auxiliar, NULL);
-            return true;
-        }
+    if (lastCharVersion - lastCharNode == 1)
+    {
+        auxiliar -> siguiente = defVersion(version,NULL,auxiliar, NULL);
+        return true;
+    }
 
-        return false;
+    return false;
 }
 
 void borrarVersiones(numVersion &version)
@@ -189,44 +181,40 @@ void borrarSubVersiones(numVersion &version)
     }
 
     borrarVersiones(version -> subVersion);
-
    	delete version;
-    
 }
 
 void reasignarVersiones(numVersion &version, int posiciones_padre, bool signo)
 {
-	if (version == NULL) return;
+    if (version == NULL) return;
 	
-   char * num_version = version -> num_version;
+    char * num_version = version -> num_version;
 
-   if (posiciones_padre == 0)
-   {
-		 	if(signo)
-		  {
-		      num_version[0] ++;
-		  }
-		  else
-		  {
-		      num_version[0] --;
-		  }  
-   }
-   else
-   {
-   		if(signo)
-		  {
-		      num_version[posiciones_padre] ++;
-		  }
-		  else
-		  {
-		      num_version[posiciones_padre] --;
-		  }
+    if (posiciones_padre == 0)
+    {
+        if(signo)
+        {
+            num_version[0] ++;
+        }
+        else
+        {
+            num_version[0] --;
+        }  
+    }
+    else
+    {
+        if (signo)
+        {
+            num_version[posiciones_padre] ++;
+        }
+        else
+        {
+        num_version[posiciones_padre] --;
+        }
    }
   
-    
 	reasignarVersiones(version -> siguiente, posiciones_padre, signo);
-  reasignarVersiones(version -> subVersion, posiciones_padre, signo);
-  
+    reasignarVersiones(version -> subVersion, posiciones_padre, signo);
 }
 
 cambio defCambio(bool tipo, char * version, char * linea)
@@ -250,13 +238,10 @@ cambio defCambio(bool tipo, char * version, char * linea)
 
 void agregarCambio(numVersion versionToInsert, bool tipo_cambio, char * linea, unsigned int nroLinea)
 {
-    printf("entra agregarCambio");
     cambio indexCambio = versionToInsert -> cambio;
     
     if (indexCambio != NULL)
     {
-        printf("entra if agregarCambio");
-
         while (indexCambio != NULL)
         {
             indexCambio -> siguiente;
@@ -266,13 +251,9 @@ void agregarCambio(numVersion versionToInsert, bool tipo_cambio, char * linea, u
     }
     else
     {
-        printf("entra else agregarCambio");
         versionToInsert -> cambio = defCambio(tipo_cambio, indexCambio -> num_version, linea);
     }
 }
-
-
-
 
 
 //Funciones para Linea
@@ -280,21 +261,20 @@ void agregarCambio(numVersion versionToInsert, bool tipo_cambio, char * linea, u
 
 line defLinea(char * contLinea, int nroLinea, line siguienteLinea)
 {
-
     line nuevaLinea = new struct Linea;
+
     nuevaLinea ->contLinea = contLinea;
     nuevaLinea -> nroLinea = nroLinea;
     nuevaLinea -> siguiente = siguienteLinea;
 
     return nuevaLinea;
-
 }
 
 void correrLineas(line &linea, bool signo)
 {
 	if (linea == NULL) return;
 	
-    if(signo)
+    if (signo)
     {
         linea -> nroLinea += 1;
     }
@@ -303,7 +283,6 @@ void correrLineas(line &linea, bool signo)
         linea -> nroLinea -= 1;
     }
     
-
 	correrLineas(linea -> siguiente, signo); 
 }
 
