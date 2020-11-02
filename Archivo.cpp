@@ -17,9 +17,8 @@ Archivo CrearArchivo(char * nombre){
 TipoRet BorrarArchivo(Archivo &a)
 {
     borrarVersiones(a -> versiones);
-
     delete a -> nombre;
-    delete a -> versiones;
+
     a = NULL;
 
     return OK;
@@ -209,7 +208,7 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             	{
               	    error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
               	    return ERROR;
-            	}            
+            	}
         }
 
         error = "Linea insertada";
@@ -232,7 +231,7 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  
     
     numVersion versionToInsert = buscarVersion(a -> versiones, version);
 
-    if(versionToInsert != NULL && versionToInsert -> siguiente == NULL && versionToInsert->subVersion == NULL)
+    if(versionToInsert != NULL && versionToInsert->subVersion == NULL)
     {
         line headLine = versionToInsert -> contenido;
         line toDelete = NULL;
@@ -267,10 +266,8 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  
             error = "Version sin lineas";
             return ERROR;
         }
-        
     }
-    
-    return NO_IMPLEMENTADA;
+    return ERROR;
 }
 
 TipoRet  MostrarTexto(Archivo a, char * version){

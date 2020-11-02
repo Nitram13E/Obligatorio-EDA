@@ -268,7 +268,6 @@ void agregarCambio(numVersion versionToInsert, bool tipo_cambio, char * linea, u
     {
         printf("entra else agregarCambio");
         versionToInsert -> cambio = defCambio(tipo_cambio, indexCambio -> num_version, linea);
-
     }
 }
 
