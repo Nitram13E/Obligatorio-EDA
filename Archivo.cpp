@@ -134,9 +134,15 @@ TipoRet MostrarVersiones(Archivo a)
 
 TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * &error)
 {
+    if (a == NULL)
+    {
+        error = "Archivo vacio";
+        return ERROR;
+    }
+    
     numVersion versionToInsert = buscarVersion(a -> versiones, version);
 
-    if (versionToInsert != NULL && versionToInsert->subVersion == NULL)
+    if (versionToInsert != NULL && versionToInsert->subVersion == NULL )
     {
         line headLine = versionToInsert->contenido;
 
@@ -184,7 +190,7 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
         return OK;
     }
 
-    error = "La version tiene subVersiones";
+    error = "No se ha podido agregar la linea";
     return ERROR;
 }
 
