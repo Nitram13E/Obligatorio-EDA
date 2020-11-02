@@ -225,7 +225,7 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  
                 delete toDelete;
             }
 
-            error = "linea %i eliminada.", nroLinea;
+            error = "linea eliminada.";
             return OK;
         }
         else
