@@ -22,7 +22,7 @@ int main()
     Cadena cadenaAux = NULL;
     Cadena linea = NULL;
     Cadena version = NULL;
-    Cadena error = NULL;
+    Cadena error = new char[MAX_LARGO_LINEA];
     Posicion nroLinea;
     char noEnter; //para evitar problema en opcion 5
 
@@ -54,14 +54,14 @@ int main()
                 {
                   cout << "Se va a borrar el archivo: " << archivo -> nombre << "\n";
                   retorno = BorrarArchivo(archivo);
-                  imprimirResultado(retorno, "");
+                  imprimirResultado(retorno, error);
                 }
                 else
                 {
                   cout << "No existe ningun archivo.\n";
                 }
                 
-                  break;
+                break;
 
             case 3:
                   cout << "Ingrese nombre de la version: ";
@@ -148,7 +148,7 @@ int main()
                   version = new char [MAX_LARGO_LINEA];
                   cin >> version;
 
-                  Iguales(archivo, cadenaAux, version, iguales);
+                  retorno = Iguales(archivo, cadenaAux, version, iguales);
                   cout << "resultado: " << iguales;
 
                   break;
@@ -199,6 +199,7 @@ void imprimirResultado(TipoRet retorno, Cadena error) {
              break;
         case ERROR:
              cout << "ERROR: " << error <<endl;
+             free(error);
              break;
         case NO_IMPLEMENTADA:
              cout << "NO_IMPLEMENTADA"<< endl;

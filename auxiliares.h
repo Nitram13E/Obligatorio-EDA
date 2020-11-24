@@ -2,7 +2,7 @@
 
 void imprimirVersiones(numVersion, int);
 
-numVersion buscarVersion(numVersion, char * );
+numVersion buscarVersion(numVersion, char *);
 
 numVersion buscarPadre(numVersion, char *);
 
@@ -20,11 +20,11 @@ void borrarSubVersiones(numVersion&);
 
 void reasignarVersiones(numVersion&, int, bool);
 
-cambio defCambio(bool, char *, char *);
+cambio defCambio(bool, unsigned int, char*);
 
-void agregarCambio(numVersion, bool, char *, unsigned int);
+void agregarCambio(numVersion, bool, char*, unsigned int);
 
-line defLinea(char *, int, line);
+line defLinea(char*, int, line);
 
 void correrLineas(line&, bool);
 

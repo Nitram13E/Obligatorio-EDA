@@ -17,8 +17,8 @@ typedef struct Linea
 
 typedef struct Cambio
 {
-	bool tipo;
-	char * num_version;
+	char * tipo;
+	int num_linea;
 	char * linea;
 	struct Cambio * siguiente;
 
@@ -48,23 +48,23 @@ Archivo CrearArchivo(char * nombre);
 
 TipoRet BorrarArchivo(Archivo &a);
 
-TipoRet CrearVersion(Archivo &a, char * version, char * &error);
+TipoRet CrearVersion(Archivo &a, char * version, char * error);
 
 TipoRet BorrarVersion(Archivo &a, char * version);
 
 TipoRet MostrarVersiones(Archivo a);
 
-TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * &error);
+TipoRet InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * error);
 
-TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * &error);
+TipoRet BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char * error);
 
-TipoRet  MostrarTexto(Archivo a, char * version);
+TipoRet MostrarTexto(Archivo a, char * version);
 
-TipoRet  MostrarCambios(Archivo a, char * version);
+TipoRet MostrarCambios(Archivo a, char * version);
 
 TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales);
 
-TipoRet  VersionIndependiente(Archivo &a, char * version);
+TipoRet VersionIndependiente(Archivo &a, char * version);
 
 
 #endif // ARCHIVO2_H_INCLUDED

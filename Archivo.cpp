@@ -4,9 +4,11 @@
 #include "auxiliares.h"
 #include "string.h"
 
-Archivo CrearArchivo(char * nombre){
-
+Archivo CrearArchivo(char * nombre)
+{
     Archivo nuevoArchivo = new struct _archivo;
+    nuevoArchivo -> nombre = new char[80];
+
     nuevoArchivo -> nombre = nombre;
     nuevoArchivo -> versiones = NULL;
 
@@ -15,6 +17,11 @@ Archivo CrearArchivo(char * nombre){
 
 TipoRet BorrarArchivo(Archivo &a)
 {
+    if (a == NULL)
+    {
+        return ERROR;
+    }
+
     borrarVersiones(a -> versiones);
     delete a -> nombre;
     a = NULL;
@@ -22,40 +29,41 @@ TipoRet BorrarArchivo(Archivo &a)
     return OK;
 }
 
-TipoRet CrearVersion(Archivo &a, char * version, char * &error)
+TipoRet CrearVersion(Archivo &a, char * version, char * error)
 {
     if (a == NULL)
     {
-        error = "no existe archivo";
+        strcpy(error, "no existe archivo");
         return ERROR;
     }
 
     numVersion header_version = a -> versiones;
     
-    if (a->versiones == NULL)
+    if (a -> versiones == NULL)
     {
-        if (version[0] == '1' && strlen(version) == 1)
+        if (strcmp(version,"1") == 0)
         {
             a -> versiones = defVersion(version,NULL,NULL,NULL);
 
-            error = "version creada";
+            strcpy(error, "version creada");
+            
             return OK;
         }
 
-        error = "La primera version debe de ser la 1";
+        strcpy(error,"La primera version debe de ser la 1");
         return ERROR;
     }
 
     //Versiones main: 1, 2, 3,...n
     if (typeVersion(version))
     {
-        if (siguienteVersion(header_version, version))
+        if (siguienteVersion(a -> versiones, version))
         {
-            error = "version creada";
+            strcpy(error, "version creada");
             return OK;
         }
-
-        error = "No existe version anteriror";
+        
+        strcpy(error, "No existe version anteriror");
         return ERROR;
     }
 
@@ -69,13 +77,14 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error)
         //Si el padre ya tiene subVersion,
         //Quiere decir que la sub version a insertar tien hermanos
         //Es por ello que la insertamos como siguiente al ultimo hermano
+
             if (siguienteVersion(padre -> subVersion, version))
             {
-                error = "version creada";
+                strcpy(error, "version creada");
                 return OK;
             }
 
-            error = "No existe version anteriror";
+            strcpy(error, "No existe version anterior");
             return ERROR;
         }
 
@@ -83,17 +92,18 @@ TipoRet CrearVersion(Archivo &a, char * version, char * &error)
         if (version[strlen(version) - 1] == '1')
         {
             padre -> subVersion = defVersion(version,NULL,NULL,NULL);
+            padre -> subVersion -> contenido = padre -> contenido;
 
-            error = "subversion creada";
+            strcpy(error, "subversion creada");
             return OK;
         }
 
-        error = "La primera primera subversion debe de ser 1";
+        strcpy(error, "La primera primera subversion debe de ser 1");
         return ERROR;
     }
 
     // si padre == NULL
-    error = "Ha ocurrido un error";
+    strcpy(error, "Ha ocurrido un error");
     return ERROR;
 }
 
@@ -118,7 +128,7 @@ TipoRet BorrarVersion(Archivo &a, char * version)
     {
     	numVersion padre = buscarPadre(a -> versiones, version);
 
-    	reasignarVersiones(toDelete -> siguiente, strlen(padre -> num_version) + 1, false);	 
+    	reasignarVersiones(toDelete -> siguiente, strlen(padre -> num_version) + 1, false);
     	borrarSubVersiones(toDelete);
     }
 
@@ -132,17 +142,17 @@ TipoRet MostrarVersiones(Archivo a)
     return OK;
 }
 
-TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * &error)
+TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nroLinea, char * error)
 {
     if (a == NULL)
     {
-        error = "Archivo vacio";
+        strcpy(error, "Archivo vacio");
         return ERROR;
     }
     
     numVersion versionToInsert = buscarVersion(a -> versiones, version);
 
-    if (versionToInsert != NULL && versionToInsert->subVersion == NULL )
+    if (versionToInsert != NULL && versionToInsert->subVersion == NULL)
     {
         line headLine = versionToInsert->contenido;
 
@@ -170,7 +180,6 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
            		else if (lineaIteradora -> siguiente != NULL)
            		{
            			correrLineas(lineaIteradora -> siguiente, true);
-		  		    lineaIteradora -> siguiente = defLinea(linea, nroLinea, lineaIteradora -> siguiente);
             	}
 				else if ((lineaIteradora -> nroLinea) + 1 == nroLinea)
             	{
@@ -178,23 +187,23 @@ TipoRet  InsertarLinea(Archivo &a, char * version, char * linea, unsigned int nr
             	}
             	else
             	{
-              	    error = "Las lineas deben ser creadas secuencialmente (uno a uno)";
+              	    strcpy(error, "Las lineas deben ser creadas secuencialmente (uno a uno)");
               	    return ERROR;
             	}
         }
 
-        error = "Linea insertada";
+        strcpy(error, "Linea insertada");
 
-        //agregarCambio(versionToInsert, true, linea, nroLinea);
+        agregarCambio(versionToInsert, true, linea, nroLinea);
 
         return OK;
     }
 
-    error = "No se ha podido agregar la linea";
+    strcpy(error, "No se ha podido agregar la linea");
     return ERROR;
 }
 
-TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  &error)
+TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  error)
 {    
     numVersion versionToInsert = buscarVersion(a -> versiones, version);
 
@@ -205,32 +214,37 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  
 
         if (headLine != NULL)
         {
+
             if (nroLinea == headLine -> nroLinea)
             {
                 correrLineas(headLine ->siguiente, false);
                 versionToInsert->contenido = headLine -> siguiente;
+
+                agregarCambio(versionToInsert, false, headLine -> contLinea, nroLinea);
                 delete headLine;
             }
             else
             {
                 while (headLine -> siguiente != NULL && headLine -> siguiente -> nroLinea != nroLinea)
-                {                    
+                {
                     headLine = headLine -> siguiente;
                 }
 
                 toDelete = headLine -> siguiente;
                 correrLineas(headLine -> siguiente, false);
                 headLine -> siguiente = headLine -> siguiente -> siguiente;
-
+                
+                agregarCambio(versionToInsert, false, toDelete -> contLinea, nroLinea);
                 delete toDelete;
             }
 
-            error = "linea eliminada.";
+            strcpy(error, "linea eliminada.");
+            
             return OK;
         }
         else
         {
-            error = "Version sin lineas";
+            strcpy(error, "Version sin lineas");
             return ERROR;
         }
     }
@@ -240,11 +254,11 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  
 
 TipoRet  MostrarTexto(Archivo a, char * version)
 {
-    numVersion fileVersion = buscarVersion(a->versiones, version);
+    numVersion fileVersion = buscarVersion(a -> versiones, version);
 
     if (fileVersion != NULL)
     {
-        line content = fileVersion->contenido;
+        line content = fileVersion -> contenido;
 
         printf("%s - %s\n\n", a -> nombre, fileVersion -> num_version);
 
@@ -257,18 +271,18 @@ TipoRet  MostrarTexto(Archivo a, char * version)
 
             while (content != NULL)
             {
-                printf("%d\t%s\n", content->nroLinea, content->contLinea);
-                content = content->siguiente;
+                printf("%d\t%s\n", content -> nroLinea, content -> contLinea);
+                content = content -> siguiente;
             }
         }
 
         return OK;
     }
-
+    
     return ERROR;
 }
 
-TipoRet  MostrarCambios(Archivo a, char * version)
+TipoRet MostrarCambios(Archivo a, char * version)
 {
     numVersion fileVersion = buscarVersion(a -> versiones, version);
 
@@ -278,10 +292,11 @@ TipoRet  MostrarCambios(Archivo a, char * version)
 
         if (indexCambio != NULL)
         {
+            printf("%s - %s\n", a -> nombre, fileVersion -> num_version);
+
             while (indexCambio != NULL)
             {
-                printf("MostrarCambios while");
-                printf("%s\t%s\t%s", indexCambio -> tipo, indexCambio -> num_version, indexCambio -> linea);
+                printf("%s\t%i\t%s\n", indexCambio -> tipo, indexCambio -> num_linea, indexCambio -> linea);
                 
                 indexCambio = indexCambio -> siguiente;
             }

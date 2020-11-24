@@ -78,7 +78,8 @@ numVersion buscarPadre(numVersion version, char * version_num)
 numVersion defVersion(char * version, numVersion siguiente, numVersion anterior, numVersion subVersion)
 {
     numVersion nuevaVersion = new struct Version;
-
+    nuevaVersion -> num_version = new char[80];
+    
     nuevaVersion -> num_version = version;
     nuevaVersion -> siguiente = siguiente;
     nuevaVersion -> anterior = anterior;
@@ -127,7 +128,7 @@ int lastToNumber(char * version)
 }
 
 
-//Se inserta una nueva sub version como siguiente del ultimo hermano
+//Se inserta una nueva version como siguiente del ultimo hermano
 bool siguienteVersion(numVersion &header_version, char * version)
 {
     numVersion auxiliar = header_version;
@@ -148,6 +149,7 @@ bool siguienteVersion(numVersion &header_version, char * version)
 
     return false;
 }
+
 
 void borrarVersiones(numVersion &version)
 {
@@ -189,7 +191,7 @@ void reasignarVersiones(numVersion &version, int posiciones_padre, bool signo)
     if (version == NULL) return;
 	
     char * num_version = version -> num_version;
-
+    
     if (posiciones_padre == 0)
     {
         if(signo)
@@ -209,17 +211,20 @@ void reasignarVersiones(numVersion &version, int posiciones_padre, bool signo)
         }
         else
         {
-        num_version[posiciones_padre] --;
+            num_version[posiciones_padre] --;
         }
    }
-  
-	reasignarVersiones(version -> siguiente, posiciones_padre, signo);
-    reasignarVersiones(version -> subVersion, posiciones_padre, signo);
+
 }
 
-cambio defCambio(bool tipo, char * version, char * linea)
+cambio defCambio(bool tipo, unsigned int num_linea, char * linea)
 {
     cambio newCambio = new struct Cambio;
+    newCambio -> linea = new char[80];
+    
+    newCambio -> num_linea = num_linea;
+    newCambio -> linea = linea;
+    newCambio -> siguiente = NULL; 
 
     if (tipo)
     {
@@ -229,9 +234,6 @@ cambio defCambio(bool tipo, char * version, char * linea)
     {
         newCambio -> tipo = "BL";
     }
-    
-    newCambio -> num_version = version;
-    newCambio -> linea = linea;
 
     return newCambio;
 }
@@ -239,19 +241,19 @@ cambio defCambio(bool tipo, char * version, char * linea)
 void agregarCambio(numVersion versionToInsert, bool tipo_cambio, char * linea, unsigned int nroLinea)
 {
     cambio indexCambio = versionToInsert -> cambio;
-    
+
     if (indexCambio != NULL)
     {
-        while (indexCambio != NULL)
+        while (indexCambio -> siguiente != NULL)
         {
-            indexCambio -> siguiente;
+            indexCambio = indexCambio -> siguiente;
         }
 
-        indexCambio = defCambio(tipo_cambio, indexCambio -> num_version, linea);
+        indexCambio -> siguiente = defCambio(tipo_cambio, nroLinea, linea);
     }
     else
     {
-        versionToInsert -> cambio = defCambio(tipo_cambio, indexCambio -> num_version, linea);
+        versionToInsert -> cambio = defCambio(tipo_cambio, nroLinea, linea);
     }
 }
 
@@ -262,8 +264,9 @@ void agregarCambio(numVersion versionToInsert, bool tipo_cambio, char * linea, u
 line defLinea(char * contLinea, int nroLinea, line siguienteLinea)
 {
     line nuevaLinea = new struct Linea;
-
-    nuevaLinea ->contLinea = contLinea;
+    nuevaLinea -> contLinea = new char[80];
+    
+    nuevaLinea -> contLinea = contLinea;
     nuevaLinea -> nroLinea = nroLinea;
     nuevaLinea -> siguiente = siguienteLinea;
 
