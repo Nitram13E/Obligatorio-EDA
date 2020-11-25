@@ -5,6 +5,7 @@
 #include "Archivo.h"
 #include "Versiones.h"
 #include "ControlStr.h"
+#include "Lineas.h"
 
 TipoRet CrearVersion(Archivo &a, char * version, char * error)
 {
@@ -70,7 +71,9 @@ TipoRet CrearVersion(Archivo &a, char * version, char * error)
         if (version[strlen(version) - 1] == '1')
         {
             padre -> subVersion = defVersion(version,NULL,NULL,NULL);
-
+            
+            heredarTexto(padre, padre -> subVersion);
+            
             strcpy(error, "subversion creada");
             return OK;
         }
@@ -301,12 +304,14 @@ bool siguienteVersion(numVersion &header_version, char * version, char * version
         iterador = iterador -> siguiente;
     }
 
-    if(iterador -> siguiente != NULL)
+    if (iterador -> siguiente != NULL)
     {
         reasignarVersiones(iterador -> siguiente, version_padre, true);
         nuevaVersion = defVersion(version, iterador -> siguiente, iterador, NULL);
         iterador -> siguiente -> anterior = nuevaVersion;
         iterador -> siguiente = nuevaVersion;
+
+        heredarTexto(header_version, nuevaVersion);
 
         return true;
     }
@@ -316,6 +321,8 @@ bool siguienteVersion(numVersion &header_version, char * version, char * version
         nuevaVersion = defVersion(version, header_version, NULL, NULL);
         header_version -> anterior = nuevaVersion;
         header_version = nuevaVersion;
+
+        heredarTexto(header_version, nuevaVersion);
 
         return true;
     }
@@ -327,6 +334,9 @@ bool siguienteVersion(numVersion &header_version, char * version, char * version
         if (lastCharVersion - lastCharNode == 1)
         {
             iterador -> siguiente = defVersion(version,NULL,iterador, NULL);
+
+            heredarTexto(header_version, iterador -> siguiente);
+
             return true;
         }
     }

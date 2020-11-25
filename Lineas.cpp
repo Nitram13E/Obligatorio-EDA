@@ -127,7 +127,7 @@ TipoRet  BorrarLinea(Archivo &a, char * version, unsigned int nroLinea, char *  
     return ERROR;
 }
 
-TipoRet  MostrarTexto(Archivo a, char * version)
+TipoRet MostrarTexto(Archivo a, char * version)
 {
     numVersion fileVersion = buscarVersion(a -> versiones, version);
 
@@ -205,4 +205,36 @@ TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales)
 
         return OK;
     }
+}
+
+void heredarTexto(numVersion padre, numVersion &hijo)
+{
+	line contenidoPadre = NULL;
+	line hijo_texto = NULL;
+
+	if (padre -> contenido != NULL)
+	{
+	
+		if (padre -> subVersion != NULL)
+		{
+			padre -> subVersion -> contenido = defLinea(padre -> contenido -> contLinea, padre -> contenido -> nroLinea, NULL);
+			contenidoPadre = padre -> contenido -> siguiente;
+			hijo_texto = padre -> subVersion -> contenido;
+		}
+		else
+		{
+			hijo -> contenido = defLinea(padre -> contenido -> contLinea, padre -> contenido -> nroLinea, NULL);
+			contenidoPadre = padre -> contenido -> siguiente;
+			hijo_texto = hijo -> contenido;
+		}
+		
+		while (contenidoPadre != NULL)
+		{
+			hijo_texto -> siguiente = defLinea(contenidoPadre -> contLinea, contenidoPadre -> nroLinea, NULL);
+			
+			hijo_texto = hijo_texto -> siguiente;
+			
+			contenidoPadre = contenidoPadre -> siguiente;
+		}
+	}
 }

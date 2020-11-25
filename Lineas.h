@@ -11,3 +11,5 @@ line defLinea(char*, int, line);
 void correrLineas(line&, bool);
 
 TipoRet Iguales(Archivo a, char * version1, char * version2,  bool &iguales);
+
+void heredarTexto(numVersion, numVersion &);
