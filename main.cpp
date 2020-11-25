@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include "Archivo.h"
 #include "Constantes.h"
+#include "Versiones.h"
+#include "Lineas.h"
+#include "Cambios.h"
 
 using namespace std;
 
@@ -199,7 +202,7 @@ void imprimirResultado(TipoRet retorno, Cadena error) {
              break;
         case ERROR:
              cout << "ERROR: " << error <<endl;
-             free(error);
+             //free(error);
              break;
         case NO_IMPLEMENTADA:
              cout << "NO_IMPLEMENTADA"<< endl;
