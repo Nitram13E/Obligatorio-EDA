@@ -1,0 +1,161 @@
+#include <cstdlib>
+#include <iostream>
+#include <stdio.h>
+#include "../Archivo.h"
+#include "../Constantes.h"
+#include "../Versiones.h"
+#include "../Lineas.h"
+#include "../Cambios.h"
+
+using namespace std;
+
+int main()
+{
+     Archivo archivo;
+     TipoRet retorno = NO_IMPLEMENTADA;
+     Cadena cadenaAux;
+     Cadena linea;
+     Cadena version ;
+     Cadena error = new char[MAX_LARGO_LINEA];
+     Posicion nroLinea;
+     bool iguales;
+
+     // Creacion y eliminacion de archivo
+
+     cadenaAux = "archivo.txt";
+
+     archivo = CrearArchivo(cadenaAux);
+
+     retorno = BorrarArchivo(archivo);
+     imprimirResultado(retorno, error);
+
+     archivo = CrearArchivo(cadenaAux);
+     
+     // Creacion de versiones principales
+     cadenaAux = "1";
+     retorno = CrearVersion(archivo,cadenaAux, error);
+     imprimirResultado(retorno, error);
+
+     cadenaAux = "2";
+     retorno = CrearVersion(archivo,cadenaAux, error);
+     imprimirResultado(retorno, error);
+
+     cadenaAux = "3";
+     retorno = CrearVersion(archivo,cadenaAux, error);
+     imprimirResultado(retorno, error);
+     
+     // Creacion de subversiones
+
+     cadenaAux = "1.1";
+     retorno = CrearVersion(archivo,cadenaAux, error);
+     imprimirResultado(retorno, error);
+     
+     cadenaAux = "1.1.1";
+     retorno = CrearVersion(archivo,cadenaAux, error);
+     imprimirResultado(retorno, error);
+
+     cadenaAux = "2.1";
+     retorno = CrearVersion(archivo,cadenaAux, error);
+     imprimirResultado(retorno, error);
+     
+     cadenaAux = "2.1.1";
+     retorno = CrearVersion(archivo,cadenaAux, error);
+     imprimirResultado(retorno, error);
+
+     // Impresion de versiones
+
+     MostrarVersiones(archivo);
+
+     // Creacion de una linea de texto
+
+     linea = "esta es la linea 1";
+     nroLinea = 1;
+
+     version = "1";
+     retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     imprimirResultado(retorno, error);
+
+     version = "1.1";
+     retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     imprimirResultado(retorno, error);
+
+     version = "1.1.1";
+     
+     retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     imprimirResultado(retorno, error);
+
+     // Agregar una nueva linea
+
+     linea = "esta es la linea 2";
+     nroLinea = 2;
+
+     version = "1.1.1";
+     
+     retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     imprimirResultado(retorno, error);
+
+     linea = "esta es la nueva linea 1";
+     nroLinea = 1;
+
+     retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     imprimirResultado(retorno, error);
+
+     // Eliminacion de una linea de version 1.1.1
+     
+     nroLinea = 2;
+
+     retorno = BorrarLinea(archivo, version, nroLinea, error);
+     imprimirResultado(retorno, error);
+
+     // Mostrar lineas de la version 1.1.1
+
+     MostrarTexto(archivo, cadenaAux);
+
+     // Mostrar los cambios realizados a la version 1.1.1
+
+     MostrarCambios(archivo, version);
+
+     //Comparar si dos versiones son iguales - Caso falso
+
+     cadenaAux = "1";
+
+     retorno = Iguales(archivo, cadenaAux, version, iguales);
+     cout << "resultado: " << iguales;
+
+     // Comparar si dos versiones son iguales - Caso verdadero
+
+     // Creacion de la version que hereda el mismo contenido que su padre
+
+     version = "1.1.1.1";
+     
+     retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     imprimirResultado(retorno, error);
+
+     // Comparacion entre version padre y version descendiente
+
+     cadenaAux = "1.1.1";
+
+     retorno = Iguales(archivo, cadenaAux, version, iguales);
+     cout << "resultado: " << iguales;
+
+
+     return 0;
+}
+
+
+void imprimirResultado(TipoRet retorno, Cadena error)
+{
+     switch(retorno)
+     {
+        case OK:
+             cout << "OK: " << error << endl;
+             break;
+        case ERROR:
+             cout << "ERROR: " << error <<endl;
+             //free(error);
+             break;
+        case NO_IMPLEMENTADA:
+             cout << "NO_IMPLEMENTADA"<< endl;
+             break;
+     }
+}

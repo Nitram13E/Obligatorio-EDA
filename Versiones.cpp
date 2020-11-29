@@ -161,7 +161,7 @@ void imprimirVersiones(numVersion version, int tab)
 // Devuelve la version buscada.
 numVersion buscarVersion(numVersion version, char * version_num)
 {
-    numVersion toFind;
+    numVersion toFind = NULL;
 
     buscadorVersion(version, version_num, toFind);
 
