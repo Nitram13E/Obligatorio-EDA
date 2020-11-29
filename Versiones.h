@@ -11,6 +11,8 @@ void imprimirVersiones(numVersion, int);
 
 numVersion buscarVersion(numVersion, char *);
 
+void buscadorVersion(numVersion version, char * version_num, numVersion &toFind);
+
 numVersion buscarPadre(numVersion, char *);
 
 numVersion defVersion(char *, numVersion, numVersion, numVersion);

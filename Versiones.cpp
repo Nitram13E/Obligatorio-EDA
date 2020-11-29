@@ -157,61 +157,32 @@ void imprimirVersiones(numVersion version, int tab)
     imprimirVersiones(version -> siguiente, tab);
 }
 
-// Busca a la version.
+
+// Devuelve la version buscada.
 numVersion buscarVersion(numVersion version, char * version_num)
 {
-    if (version != NULL)
-    {
-        if (strcmp(version->num_version, version_num) == 0)
-        {
-            return version;
-        }
+    numVersion toFind;
 
-        if (version->siguiente != NULL)
-        {
-            return buscarVersion(version->siguiente, version_num);
-        }
-        else if (version -> subVersion != NULL)
-        {
-            return buscarVersion(version->subVersion, version_num);
-        }
+    buscadorVersion(version, version_num, toFind);
 
-    }
-
-    return NULL;
+    return toFind;
 }
 
-/*
 // Busca a la version.
-numVersion buscarVersion(numVersion version, char * version_num)
+void buscadorVersion(numVersion version, char * version_num, numVersion &toFind)
 {
-    int largoVersion = strlen(version_num);
-    char * frac = new char[largoVersion];
-    int lastIndex = 0;
+    if (version == NULL)
+    return;
 
-    numVersion found = version;
-
-    while (lastIndex != largoVersion)
+    if (strcmp(version -> num_version, version_num) == 0)
     {
-        copiarCadena(version_num, frac, lastIndex, '.');
-
-        if ((strcmp(version -> num_version, frac) == 0) && lastIndex != largoVersion)
-        {
-            found = found -> subVersion;
-        }
-        else if ((strcmp(version -> num_version, frac) == 0) && lastIndex == largoVersion)
-        {
-            return found;
-        }
-        else
-        {
-            found = found -> siguiente;
-        }
+        toFind = version;
     }
 
-    return NULL;
+    buscadorVersion(version->subVersion, version_num, toFind);
+
+    buscadorVersion(version -> siguiente, version_num, toFind);
 }
-*/
 
 numVersion buscarPadre(numVersion version, char * version_num)
 {
