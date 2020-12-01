@@ -160,7 +160,6 @@ int main()
      version2 = "1.1.1";
      retorno = Iguales(archivo, version2, version, iguales);
      cout << "resultado: " << iguales << endl;
-     
 
      return 0;
 }
