@@ -155,6 +155,14 @@ int main()
                   cout << "resultado: " << iguales;
 
                   break;
+           case 10:
+                  cout << "Ingrese version a eliminar: ";
+                  version = new char [MAX_LARGO_LINEA];
+                  cin >> version;
+
+                  retorno =  BorrarVersion(archivo, version);
+
+                  break;
 
            case 11:
                   cout << "Esta seguro de que desea salir (s/n)?: ";

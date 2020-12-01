@@ -90,28 +90,53 @@ TipoRet CrearVersion(Archivo &a, char * version, char * error)
 TipoRet BorrarVersion(Archivo &a, char * version)
 {
     numVersion toDelete = buscarVersion(a -> versiones, version);
-    
+
     if (toDelete == NULL)
     {
         return ERROR;
     }
     
-    toDelete -> anterior -> siguiente = toDelete -> siguiente;
-    toDelete -> siguiente -> anterior = toDelete -> anterior;
-    
     if (typeVersion(version))
     {
-    	reasignarVersiones(toDelete -> siguiente, 0, false);
+        if (toDelete -> anterior == NULL) // primera
+        {
+            a -> versiones = toDelete -> siguiente;
+        }
+        else
+        {
+            toDelete -> anterior -> siguiente = toDelete -> siguiente;
+
+            if (toDelete -> siguiente != NULL)
+            {
+                toDelete -> siguiente -> anterior = toDelete -> anterior;
+            }                                                
+        }
+
+    	reasignarVersiones(toDelete -> siguiente, NULL, false);
     	borrarVersiones(toDelete);
     }
     else
     {
     	numVersion padre = buscarPadre(a -> versiones, version);
 
+        if (toDelete -> anterior == NULL) // primera subversion
+        {
+            padre -> subVersion = toDelete -> siguiente;
+        }
+        else
+        {
+            toDelete -> anterior -> siguiente = toDelete -> siguiente;
+
+            if (toDelete -> siguiente != NULL)
+            {
+                toDelete -> siguiente -> anterior = toDelete -> anterior;
+            }
+        }
+
     	reasignarVersiones(toDelete -> siguiente, padre -> num_version, false);
     	borrarSubVersiones(toDelete);
     }
-
+    
     return OK;
 }
 
@@ -355,7 +380,7 @@ void reasignarVersiones(numVersion &version, char * str_padre, bool signo)
     if (version == NULL) return;
 
     char * num_version = version -> num_version;
-
+    
     reasignador(str_padre, version -> num_version, signo);
 
     reasignarVersiones(version -> siguiente, str_padre, signo);
