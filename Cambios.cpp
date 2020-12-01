@@ -55,7 +55,7 @@ TipoRet MostrarCambios(Archivo a, char * version)
         if (indexCambio != NULL)
         {
             printf("%s - %s\n", a -> nombre, fileVersion -> num_version);
-
+            
             while (indexCambio != NULL)
             {
                 printf("%s\t%i\t%s\n", indexCambio -> tipo, indexCambio -> num_linea, indexCambio -> linea);

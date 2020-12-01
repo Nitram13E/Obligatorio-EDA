@@ -1,105 +1,130 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdio.h>
-#include "../Archivo.h"
-#include "../Constantes.h"
-#include "../Versiones.h"
-#include "../Lineas.h"
-#include "../Cambios.h"
+#include <cstring>
+
+#include "Archivo.h"
+#include "Constantes.h"
+#include "Versiones.h"
+#include "Lineas.h"
+#include "Cambios.h"
 
 using namespace std;
 
+void imprimirResultado(TipoRet retorno,Cadena error);
+
 int main()
 {
-     Archivo archivo;
+     Archivo archivo = NULL;
      TipoRet retorno = NO_IMPLEMENTADA;
-     Cadena cadenaAux;
-     Cadena linea;
-     Cadena version ;
+     char * nombreArch;
+     char * linea;
+     char * version;
+     char * version2;
      Cadena error = new char[MAX_LARGO_LINEA];
      Posicion nroLinea;
      bool iguales;
 
      // Creacion y eliminacion de archivo
-
-     cadenaAux = "archivo.txt";
-
-     archivo = CrearArchivo(cadenaAux);
+     
+     nombreArch = "archivo.txt";
+     archivo = CrearArchivo(nombreArch);
+     printf("El nombre del archivo es %s\n", archivo -> nombre);
 
      retorno = BorrarArchivo(archivo);
      imprimirResultado(retorno, error);
 
-     archivo = CrearArchivo(cadenaAux);
+     nombreArch = "archivo.txt";
+     archivo = CrearArchivo(nombreArch);
+     printf("El nombre del archivo es %s\n", archivo -> nombre);
      
      // Creacion de versiones principales
-     cadenaAux = "1";
-     retorno = CrearVersion(archivo,cadenaAux, error);
+     version = "1";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo, version, error);
      imprimirResultado(retorno, error);
 
-     cadenaAux = "2";
-     retorno = CrearVersion(archivo,cadenaAux, error);
+     version = "2";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo, version, error);
      imprimirResultado(retorno, error);
 
-     cadenaAux = "3";
-     retorno = CrearVersion(archivo,cadenaAux, error);
+     version = "3";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo,version, error);
+     imprimirResultado(retorno, error);
+
+     // Creacion de version principal erronea
+     version = "7";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo,version, error);
      imprimirResultado(retorno, error);
      
      // Creacion de subversiones
 
-     cadenaAux = "1.1";
-     retorno = CrearVersion(archivo,cadenaAux, error);
+     version = "1.1";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo,version, error);
      imprimirResultado(retorno, error);
      
-     cadenaAux = "1.1.1";
-     retorno = CrearVersion(archivo,cadenaAux, error);
+     version = "1.1.1";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo,version, error);
      imprimirResultado(retorno, error);
 
-     cadenaAux = "2.1";
-     retorno = CrearVersion(archivo,cadenaAux, error);
+     version = "2.1";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo,version, error);
      imprimirResultado(retorno, error);
      
-     cadenaAux = "2.1.1";
-     retorno = CrearVersion(archivo,cadenaAux, error);
+     version = "2.1.1";
+     printf("La version es igual a %s\n", version);
+     retorno = CrearVersion(archivo,version, error);
      imprimirResultado(retorno, error);
 
      // Impresion de versiones
 
      MostrarVersiones(archivo);
 
-     // Creacion de una linea de texto
+
+     // Creacion de lineas de texto
 
      linea = "esta es la linea 1";
      nroLinea = 1;
 
+     // Creacion de una linea de texto erronea
      version = "1";
+     printf("Linea a agregar: %s\n", linea);
      retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
      imprimirResultado(retorno, error);
 
+     // Creacion de una linea de texto erronea
      version = "1.1";
+     printf("Linea a agregar: %s\n", linea);
      retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
      imprimirResultado(retorno, error);
 
+     // Creacion de una linea de texto exitosa
      version = "1.1.1";
-     
+     printf("Linea a agregar: %s\n", linea);
      retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
      imprimirResultado(retorno, error);
 
      // Agregar una nueva linea
-
-     linea = "esta es la linea 2";
      nroLinea = 2;
-
-     version = "1.1.1";
-     
+     linea = "esta es la linea 2";
      retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     printf("Linea a agregar: %s\n", linea);
      imprimirResultado(retorno, error);
-
+     
+     // Remplazar linea 1 por nueva linea
      linea = "esta es la nueva linea 1";
      nroLinea = 1;
 
      retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     printf("Linea a agregar: %s\n", linea);
      imprimirResultado(retorno, error);
-
+     
      // Eliminacion de una linea de version 1.1.1
      
      nroLinea = 2;
@@ -109,35 +134,33 @@ int main()
 
      // Mostrar lineas de la version 1.1.1
 
-     MostrarTexto(archivo, cadenaAux);
+     MostrarTexto(archivo, version);
 
      // Mostrar los cambios realizados a la version 1.1.1
 
      MostrarCambios(archivo, version);
 
      //Comparar si dos versiones son iguales - Caso falso
+     
+     version = "1.1";
+     version2 = "1";
 
-     cadenaAux = "1";
-
-     retorno = Iguales(archivo, cadenaAux, version, iguales);
-     cout << "resultado: " << iguales;
+     retorno = Iguales(archivo, version2, version, iguales);
+     cout << "resultado: " << iguales << endl;
 
      // Comparar si dos versiones son iguales - Caso verdadero
 
      // Creacion de la version que hereda el mismo contenido que su padre
-
      version = "1.1.1.1";
-     
-     retorno = InsertarLinea(archivo, version, linea, nroLinea, error);
+     retorno = CrearVersion(archivo, version, error);
      imprimirResultado(retorno, error);
 
      // Comparacion entre version padre y version descendiente
 
-     cadenaAux = "1.1.1";
-
-     retorno = Iguales(archivo, cadenaAux, version, iguales);
-     cout << "resultado: " << iguales;
-
+     version2 = "1.1.1";
+     retorno = Iguales(archivo, version2, version, iguales);
+     cout << "resultado: " << iguales << endl;
+     
 
      return 0;
 }
